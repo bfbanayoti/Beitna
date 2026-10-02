@@ -1,0 +1,570 @@
+<!doctype html>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Beitna</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,600&display=swap">
+<style>
+/* Layout: single phone-width column, sticky header, fixed bottom tab bar, floating add button. Tokens mirror the original Beitna theme. */
+:root{
+  --cream:oklch(95.9% .022 88.5); --sand:oklch(90.7% .032 84.6); --surface:oklch(98.7% .01 88);
+  --ink:oklch(24.3% .021 54.5); --ink-2:oklch(24.3% .021 54.5/.62); --hairline:oklch(24.3% .021 54.5/.12);
+  --clay:oklch(55.2% .128 40.2); --clay-ink:oklch(42% .107 38); --on-clay:oklch(95.9% .022 88.5);
+  --sage:oklch(49.8% .062 156.6); --sage-ink:oklch(39.2% .055 157); --sage-soft:oklch(49.8% .062 156.6/.14);
+  --amber:oklch(74.6% .129 71.8); --amber-ink:oklch(55% .113 68); --amber-soft:oklch(74.6% .129 71.8/.2);
+  --danger:oklch(55% .183 26.5); --scrim:oklch(24.3% .021 54.5/.4);
+  --display:"Fraunces","Amiri",Georgia,serif; --body:"Cairo","IBM Plex Sans Arabic",system-ui,sans-serif;
+  --r:1rem;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --cream:oklch(20% .015 60); --sand:oklch(28% .02 60); --surface:oklch(24% .016 60);
+  --ink:oklch(93% .02 85); --ink-2:oklch(93% .02 85/.62); --hairline:oklch(93% .02 85/.12);
+  --clay:oklch(62% .13 40); --clay-ink:oklch(75% .11 42); --on-clay:oklch(98% .01 88);
+  --sage:oklch(66% .08 156); --sage-ink:oklch(76% .07 157); --sage-soft:oklch(66% .08 156/.18);
+  --amber:oklch(76% .13 72); --amber-ink:oklch(80% .12 72); --amber-soft:oklch(76% .13 72/.18);
+  --danger:oklch(68% .17 27); --scrim:oklch(0% 0 0/.55); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --cream:oklch(20% .015 60); --sand:oklch(28% .02 60); --surface:oklch(24% .016 60);
+  --ink:oklch(93% .02 85); --ink-2:oklch(93% .02 85/.62); --hairline:oklch(93% .02 85/.12);
+  --clay:oklch(62% .13 40); --clay-ink:oklch(75% .11 42); --on-clay:oklch(98% .01 88);
+  --sage:oklch(66% .08 156); --sage-ink:oklch(76% .07 157); --sage-soft:oklch(66% .08 156/.18);
+  --amber:oklch(76% .13 72); --amber-ink:oklch(80% .12 72); --amber-soft:oklch(76% .13 72/.18);
+  --danger:oklch(68% .17 27); --scrim:oklch(0% 0 0/.55); color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--cream);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5;margin:0}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--clay);outline-offset:2px}
+.wrap{max-width:420px;margin:0 auto;padding-inline:16px;padding-block:12px 120px}
+header.top{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-block:8px 4px}
+.brand small{display:block;font-size:12px;color:var(--ink-2)}
+.brand b{font-family:var(--display);font-size:26px;font-weight:600;line-height:1}
+.hbtns{display:flex;gap:8px}
+.circ{width:40px;height:40px;border-radius:50%;border:0;background:var(--sand);font-weight:700;font-size:14px}
+.circ.me{background:var(--clay);color:var(--on-clay)}
+h1{font-family:var(--display);font-weight:600;font-size:24px;margin:14px 0 12px;text-wrap:balance}
+h2{font-family:var(--display);font-weight:600;font-size:19px;margin:0}
+h3{font-size:13px;font-weight:600;margin:0 0 4px;color:var(--ink-2)}
+.stack{display:flex;flex-direction:column;gap:14px}
+.card{background:var(--surface);border:1px solid var(--hairline);border-radius:var(--r);padding:16px}
+.hero{background:var(--clay);color:var(--on-clay);border:0}
+.hero h3{color:inherit;opacity:.85}
+.hero .big{font-family:var(--display);font-size:36px}
+.hero .sub{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;opacity:.85}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.big{font-family:var(--display);font-size:28px;font-weight:600;line-height:1.2;font-variant-numeric:tabular-nums}
+.muted{color:var(--ink-2);font-size:12.5px}
+.pos{color:var(--sage-ink)} .neg{color:var(--danger)} .warn{color:var(--amber-ink)}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.row>div{min-width:0}
+.sechead{display:flex;justify-content:space-between;align-items:baseline;margin-top:6px}
+.link{background:none;border:0;color:var(--clay-ink);font-weight:600;font-size:13px;padding:4px}
+.seg{display:flex;gap:4px;background:var(--sand);border-radius:999px;padding:4px;overflow-x:auto;scrollbar-width:none}
+.seg button{border:0;background:none;border-radius:999px;padding:6px 14px;white-space:nowrap;font-size:13.5px;color:var(--ink-2)}
+.seg button.on{background:var(--surface);color:var(--ink);font-weight:600;box-shadow:0 1px 2px var(--hairline)}
+.selrow{display:flex;gap:8px;overflow-x:auto;padding-bottom:2px}
+.selrow select{min-width:120px}
+select,input[type=text],input[type=number],input[type=date],textarea{width:100%;background:var(--sand);border:1px solid transparent;border-radius:999px;padding:10px 14px;min-height:44px}
+textarea{border-radius:14px}
+label.f{display:flex;flex-direction:column;gap:4px;font-size:12.5px;font-weight:600}
+.btn{border:0;border-radius:999px;padding:10px 18px;font-weight:600;background:var(--sand);min-height:42px}
+.btn.pri{background:var(--clay);color:var(--on-clay)}
+.btn.sm{padding:6px 14px;min-height:34px;font-size:13px}
+.btn.danger{background:none;border:1px solid var(--danger);color:var(--danger)}
+.pill{display:inline-block;border-radius:999px;padding:2px 10px;font-size:11.5px;font-weight:600;background:var(--sand)}
+.pill.ok{background:var(--sage-soft);color:var(--sage-ink)} .pill.late{background:var(--amber-soft);color:var(--amber-ink)}
+.bar{height:8px;background:var(--sand);border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--sage);border-radius:99px}
+.bar.late i{background:var(--amber)} .bar.clay i{background:var(--clay)}
+.list{display:flex;flex-direction:column}
+.li{display:flex;align-items:center;gap:12px;padding-block:10px;border-top:1px solid var(--hairline)}
+.li:first-child{border-top:0}
+.li .ic{width:38px;height:38px;border-radius:50%;background:var(--sand);display:grid;place-items:center;flex:none;font-size:17px}
+.li .grow{flex:1;min-width:0}
+.li .amt{font-variant-numeric:tabular-nums;font-weight:600;white-space:nowrap}
+.tip{border-inline-start:0;background:var(--sand);border-radius:14px;padding:12px 14px;display:flex;flex-direction:column;gap:8px;align-items:flex-start}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid var(--hairline);background:var(--surface);border-radius:999px;padding:4px 12px;font-size:12.5px}
+.chip.on{background:var(--ink);color:var(--cream);border-color:var(--ink)}
+nav.tabs{position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--hairline);padding-bottom:env(safe-area-inset-bottom,0px);z-index:20}
+nav.tabs .in{max-width:420px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);padding:6px 8px}
+nav.tabs button{border:0;background:none;border-radius:999px;padding:6px 0;display:flex;flex-direction:column;align-items:center;font-size:11.5px;color:var(--ink-2)}
+nav.tabs button span{font-size:19px;line-height:1.2}
+nav.tabs button.on{background:var(--sand);color:var(--clay-ink);font-weight:700}
+.fab{position:fixed;inset-inline-start:max(16px,calc(50% - 200px));bottom:calc(84px + env(safe-area-inset-bottom,0px));z-index:21;background:var(--clay);color:var(--on-clay);border:0;border-radius:999px;padding:12px 20px;font-weight:700;box-shadow:0 6px 18px oklch(42% .107 38/.35)}
+[dir=rtl] .fab{inset-inline-start:auto;inset-inline-end:max(16px,calc(50% - 200px))}
+.sheet-bg{position:fixed;inset:0;background:var(--scrim);z-index:40;display:flex;align-items:flex-end;justify-content:center}
+.sheet{background:var(--surface);width:100%;max-width:440px;max-height:92vh;overflow:auto;border-radius:24px 24px 0 0;padding:18px 16px calc(24px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:12px}
+.sheet>*{flex-shrink:0}
+.toast{position:fixed;bottom:150px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--cream);padding:10px 18px;border-radius:999px;z-index:60;font-size:13.5px}
+.catbar{display:grid;grid-template-columns:auto 1fr auto;gap:4px 10px;align-items:center}
+.catbar .bar{grid-column:1/-1}
+svg text{fill:var(--ink-2);font-family:var(--body);font-size:10px}
+.legend{display:flex;gap:14px;font-size:12px;color:var(--ink-2)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-inline-end:5px;vertical-align:-1px}
+.toggle{display:flex;justify-content:space-between;align-items:center;padding-block:8px}
+.sw{width:46px;height:28px;border-radius:99px;border:0;background:var(--sand);position:relative;flex:none}
+.sw::after{content:"";position:absolute;top:3px;inset-inline-start:3px;width:22px;height:22px;border-radius:50%;background:var(--surface);box-shadow:0 1px 2px var(--hairline);transition:.15s}
+.sw.on{background:var(--sage)} .sw.on::after{inset-inline-start:21px}
+.mono{font-family:ui-monospace,monospace;font-size:12px;word-break:break-all;background:var(--sand);padding:8px 10px;border-radius:10px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head><body>
+<div id="app"></div>
+<script>
+// ---------- reference data ----------
+const CATS={
+ rent:['🏠','إيجار','Rent','fixed'],utilities:['💡','كهرباء وماء','Utilities','fixed'],groceries:['🛒','بقالة','Groceries'],
+ fuel:['⛽','وقود','Fuel'],dining:['☕','مطاعم وقهوة','Dining & coffee'],subscriptions:['📺','اشتراكات','Subscriptions','fixed'],
+ internet:['📶','إنترنت وهاتف','Internet & phone','fixed'],health:['🩺','صحة','Health'],transport:['🚕','مواصلات','Transport'],
+ clothing:['👕','ملابس','Clothing'],family:['🎁','أهل وهدايا','Family & gifts'],education:['📚','تعليم','Education'],
+ home:['🪑','أثاث ومنزل','Home & furniture'],personal:['🫧','مصروف شخصي','Personal spending'],jamiya:['🤝','جمعية',"Jam'iya",'fixed'],
+ other:['•','أخرى','Other'],salary:['💼','راتب','Salary'],goal:['🎯','هدف','Goal']
+};
+const EXP_CATS=Object.keys(CATS).filter(k=>k!=='salary'&&k!=='goal');
+const METHODS={card:['بطاقة','Card'],bank:['تحويل بنكي','Bank transfer'],cash:['نقد','Cash'],wallet:['محفظة','Wallet']};
+const TAGS=[['أهل','Family'],['نخرج معاً','Going out together'],['العودة للمدارس','Back to school'],['تجهيز البيت','Setting up home'],['صيف','Summer']];
+const ACC_TYPES={bank:['بنك','Bank'],cash:['نقد','Cash'],savings:['توفير','Savings'],wallet:['محفظة','Wallet']};
+const INV_IC={stocks:'📈',gold:'🥇',funds:'📦',property:'🏘️'};
+const MONTHS_AR=['كانون الثاني','شباط','آذار','نيسان','أيار','حزيران','تموز','آب','أيلول','تشرين الأول','تشرين الثاني','كانون الأول'];
+const MONTHS_EN=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+// ---------- demo data generator ----------
+function rng(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const pad=n=>String(n).padStart(2,'0');
+const ymd=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+const ym=d=>d.slice(0,7);
+function addMonths(ymStr,n){let[y,m]=ymStr.split('-').map(Number);m+=n;while(m>12){m-=12;y++}while(m<1){m+=12;y--}return y+'-'+pad(m)}
+function todayStr(){return ymd(new Date())}
+
+function seedData(){
+ const R=rng(20261002), r=(a,b)=>+(a+R()*(b-a)).toFixed(3), pick=a=>a[Math.floor(R()*a.length)];
+ const today=todayStr(), cur=ym(today), tDay=+today.slice(8);
+ const months=[];for(let i=5;i>=0;i--)months.push(addMonths(cur,-i));
+ const target=(m,dd)=>{const y=+m.slice(0,4),mo=+m.slice(5);const last=new Date(y,mo,0).getDate();return m+'-'+pad(Math.min(dd,last))};
+ const d={
+  partners:{A:{id:'A',name:'أحمد',nameEn:'Ahmad',monthlyIncome:1250},B:{id:'B',name:'سارة',nameEn:'Sara',monthlyIncome:980}},
+  me:'A',
+  accounts:[
+   {id:'acc_a_bank',name:'أحمد — البنك العربي',nameEn:'Ahmad — Arab Bank',type:'bank',owner:'A',balance:1412.35,visibility:'full',institution:'Arab Bank',linked:true},
+   {id:'acc_a_cash',name:'نقد أحمد',nameEn:'Ahmad cash',type:'cash',owner:'A',balance:78.25,visibility:'balance'},
+   {id:'acc_a_private',name:'توفير أحمد الخاص',nameEn:'Ahmad private savings',type:'savings',owner:'A',balance:940,visibility:'hidden'},
+   {id:'acc_b_bank',name:'سارة — بنك الإسكان',nameEn:'Sara — Housing Bank',type:'bank',owner:'B',balance:1186.7,visibility:'full',institution:'Housing Bank',linked:true},
+   {id:'acc_b_wallet',name:'زين كاش — سارة',nameEn:'Zain Cash — Sara',type:'wallet',owner:'B',balance:61.4,visibility:'full'},
+   {id:'acc_joint_bank',name:'حساب البيت المشترك',nameEn:'Joint household account',type:'bank',owner:'joint',balance:612.9,visibility:'full',institution:'Bank of Jordan',linked:true},
+   {id:'acc_joint_savings',name:'توفير البيت',nameEn:'Household savings',type:'savings',owner:'joint',balance:7460,visibility:'full',goalIds:['g_apartment','g_emergency']},
+   {id:'acc_travel_savings',name:'توفير السفر',nameEn:'Travel savings',type:'savings',owner:'joint',balance:1180,visibility:'full',goalIds:['g_travel']}
+  ],
+  bills:[
+   {id:'b_rent',name:'إيجار الشقة',nameEn:'Apartment rent',amount:400,dueDay:1,category:'rent',splitRule:{type:'income'},accountId:'acc_joint_bank',paidMonth:cur},
+   {id:'b_electric',name:'كهرباء وماء',nameEn:'Electricity & water',amount:64.25,dueDay:5,category:'utilities',splitRule:{type:'equal'},accountId:'acc_joint_bank'},
+   {id:'b_internet',name:'إنترنت أورنج',nameEn:'Orange internet',amount:27.9,dueDay:7,category:'internet',splitRule:{type:'equal'},accountId:'acc_joint_bank'},
+   {id:'b_mobile',name:'خطوط الهاتف',nameEn:'Mobile lines',amount:18.5,dueDay:20,category:'internet',splitRule:{type:'equal'},accountId:'acc_a_bank'},
+   {id:'b_netflix',name:'نتفليكس',nameEn:'Netflix',amount:6.99,dueDay:8,category:'subscriptions',splitRule:{type:'equal'},accountId:'acc_a_bank',paidMonth:cur},
+   {id:'b_shahid',name:'شاهد VIP',nameEn:'Shahid VIP',amount:5.5,dueDay:9,category:'subscriptions',splitRule:{type:'equal'},accountId:'acc_b_bank',paidMonth:cur},
+   {id:'b_gym',name:'نادي رياضي',nameEn:'Gym membership',amount:25,dueDay:5,category:'health',splitRule:{type:'custom',customA:0},accountId:'acc_b_bank',paidMonth:cur}
+  ],
+  goals:[
+   {id:'g_apartment',name:'دفعة أولى لشقة',nameEn:'Apartment down payment',template:'apartment',target:25000,targetDate:'2029-08-14',splitRule:{type:'income'},contributions:[{id:'c_ap_a',partner:'A',amount:4200,date:'2024-06-01'},{id:'c_ap_b',partner:'B',amount:3100,date:'2024-06-01'}]},
+   {id:'g_travel',name:'سفر إلى تركيا',nameEn:'Trip to Türkiye',template:'travel',target:3000,targetDate:'2027-05-14',splitRule:{type:'equal'},contributions:[]},
+   {id:'g_emergency',name:'صندوق طوارئ',nameEn:'Emergency fund',template:'emergency',target:6000,targetDate:'2028-02-14',splitRule:{type:'income'},contributions:[{id:'c_em_a',partner:'A',amount:1150,date:'2025-01-01'},{id:'c_em_b',partner:'B',amount:850,date:'2025-01-01'}]}
+  ],
+  investments:[
+   {id:'inv_ase',name:'أسهم بورصة عمّان',nameEn:'Amman Stock Exchange shares',type:'stocks',owner:'joint',cost:1800,value:2142.5},
+   {id:'inv_gold',name:'ذهب (٥ ليرات)',nameEn:'Gold (5 liras)',type:'gold',owner:'B',cost:1150,value:1480},
+   {id:'inv_fund',name:'صندوق استثماري',nameEn:'Investment fund',type:'funds',owner:'A',cost:900,value:962.4},
+   {id:'inv_land',name:'حصة أرض في مادبا',nameEn:'Land share in Madaba',type:'property',owner:'joint',cost:7000,value:8200}
+  ],
+  jamiya:[{id:'j_work',name:'جمعية الدوام',nameEn:"Work jam'iya",amount:200,frequency:'monthly',startMonth:addMonths(cur,-3),currentRound:4,members:[
+   {name:'أحمد',nameEn:'Ahmad',turn:4,received:false},{name:'سارة',nameEn:'Sara',turn:6,received:false},{name:'منى',nameEn:'Muna',turn:1,received:true},
+   {name:'خالد',nameEn:'Khaled',turn:2,received:true},{name:'ليلى',nameEn:'Layla',turn:3,received:true},{name:'سامي',nameEn:'Sami',turn:5,received:false}]}],
+  settlements:[{id:'s_1',date:target(addMonths(cur,-2),28),from:'B',to:'A',amount:95.5}],
+  reviews:[{month:addMonths(cur,-1),reviewedA:true,reviewedB:true}],
+  transactions:[],
+  settings:{lang:'ar',numerals:'arabic',plan:'plus',defaultSplit:{type:'income'},categoryRules:[{category:'groceries',splitRule:{type:'equal'}},{category:'rent',splitRule:{type:'income'}},{category:'family',splitRule:{type:'custom',customA:40}}],savingsRateTarget:20,biometric:true,twoFactor:true,pinSet:true,hideHidden:true}
+ };
+ // investment history: drift toward current value
+ d.investments.forEach(inv=>{inv.history=months.map((m,i)=>({month:m,value:+(inv.value*(0.93+0.07*(i/5))+(R()-.5)*inv.value*.01).toFixed(3)}))});
+ let n=0;const T=[];
+ const add=(o)=>{T.push(Object.assign({id:'t_'+(++n),tags:[],splitRule:o.scope==='ours'?{type:'equal'}:undefined,kind:'expense'},o))};
+ const nm={'Private spending':'مصروف خاص','Family visit':'زيارة العيلة','Careem':'كريم','Taxi':'تاكسي','Total':'توتال','Manaseer':'مناصير','Coffee shop':'كوفي شوب','Starbucks':'ستاربكس','Carrefour':'كارفور','Vegetable market':'خضرة الحسبة','Corner shop':'بقالة الحي','Sultan Center':'السلطان','Sameh Mall':'سامح مول','Reem Shawerma':'شاورما ريم','Ramla Cafe':'كافيه رملة','Hashem':'هاشم','Pharmacy':'صيدلية','Clinic':'عيادة','Zara':'زارا','LC Waikiki':'إل سي وايكيكي','Gift for family':'هدية للأهل','Houseware':'أدوات منزلية','Home furniture':'أثاث البيت','School supplies':'قرطاسية'};
+ const ex=(date,cat,en,amount,o={})=>{const scope=o.scope||'ours',payer=o.paidBy||'A';
+  const acc=o.accountId||(payer==='joint'?'acc_joint_bank':payer==='A'?(o.method==='wallet'?'acc_a_cash':'acc_a_bank'):(o.method==='wallet'?'acc_b_wallet':'acc_b_bank'));
+  add({date,amount,accountId:acc,owner:payer==='joint'?'joint':payer,paidBy:payer,scope,category:cat,merchant:nm[en]||o.ar||en,merchantEn:en,method:o.method||'card',splitRule:scope==='ours'?(o.split||{type:'equal'}):undefined,tags:o.tags||[],recurring:o.recurring})};
+ const contrib={g_apartment:[263,212],g_travel:[72,80],g_emergency:[110,85]};
+ months.forEach((m,mi)=>{
+  const isCur=m===cur, mo=+m.slice(5), maxDay=isCur?tDay:31;
+  const D=dd=>target(m,dd), ok=dd=>dd<=maxDay;
+  add({date:D(1),amount:1250,accountId:'acc_a_bank',owner:'A',paidBy:'A',scope:'mine',category:'salary',merchant:'راتب أحمد',merchantEn:'Ahmad salary',method:'bank',kind:'income'});
+  add({date:D(1),amount:980,accountId:'acc_b_bank',owner:'B',paidBy:'B',scope:'mine',category:'salary',merchant:'راتب سارة',merchantEn:'Sara salary',method:'bank',kind:'income'});
+  ex(D(1),'rent','Apartment rent',400,{paidBy:'joint',method:'bank',split:{type:'income'},recurring:true,ar:'إيجار الشقة'});
+  ex(D(1),'jamiya',"Work jam'iya",200,{paidBy:'A',method:'bank',ar:'جمعية الدوام',recurring:true});
+  ex(D(2),'personal','Private spending',r(35,60),{scope:'mine',paidBy:pick(['A','B']),method:'bank'});
+  ex(D(2),'family','Family visit',r(22,45),{paidBy:'A',method:'cash',tags:['أهل'],split:{type:'custom',customA:40}});
+  ex(D(1),'transport',pick(['Careem','Taxi']),r(3.5,8),{scope:'mine',paidBy:pick(['A','B']),method:'wallet'});
+  // goal transfers
+  Object.entries(contrib).forEach(([gid,[a,b]])=>{
+   const dA=isCur?Math.min(2,maxDay):26,dB=isCur?Math.min(2,maxDay):28;
+   [['A',a,dA],['B',b,dB]].forEach(([p,base,dd])=>{if(!ok(dd))return;const amt=r(base*.85,base*1.12);const g=d.goals.find(x=>x.id===gid);
+    g.contributions.push({id:'c_'+gid+'_'+p+'_'+mi,partner:p,amount:amt,date:D(dd)});
+    add({date:D(dd),amount:amt,accountId:p==='A'?'acc_a_bank':'acc_b_bank',owner:p,paidBy:p,scope:'ours',category:'goal',merchant:g.name,merchantEn:g.nameEn,method:'bank',splitRule:g.splitRule,goalId:gid,kind:'goal'})})});
+  if(isCur)return;
+  ex(D(5),'utilities','Electricity & water',r(58,82),{paidBy:'joint',method:'bank',ar:'كهرباء وماء',recurring:true});
+  ex(D(7),'internet','Orange internet',27.9,{paidBy:'joint',method:'bank',ar:'إنترنت أورنج',recurring:true});
+  ex(D(20),'internet','Mobile lines',18.5,{paidBy:'A',ar:'خطوط الهاتف',recurring:true});
+  ex(D(8),'subscriptions','Netflix',6.99,{paidBy:'A',ar:'نتفليكس',recurring:true});
+  ex(D(9),'subscriptions','Shahid VIP',5.5,{paidBy:'B',ar:'شاهد VIP',recurring:true});
+  ex(D(5),'health','Gym membership',25,{scope:'mine',paidBy:'B',ar:'نادي رياضي',recurring:true});
+  const summer=mo>=6&&mo<=8;
+  for(let i=0;i<7;i++)ex(D(3+i*4),'groceries',pick(['Carrefour','Vegetable market','Corner shop','Sultan Center','Sameh Mall']),r(14,52),{paidBy:R()<.55?'A':'B'});
+  for(let i=0;i<5;i++)ex(D(4+i*5),'dining',pick(['Coffee shop','Starbucks']),r(4,10),{scope:'mine',paidBy:R()<.5?'A':'B',method:'wallet',tags:summer&&R()<.4?['صيف']:[]});
+  for(let i=0;i<2;i++)ex(D(11+i*9),'dining',pick(['Reem Shawerma','Ramla Cafe','Hashem']),r(12,22),{paidBy:R()<.5?'A':'B',tags:['نخرج معاً'].concat(summer?['صيف']:[])});
+  for(let i=0;i<3;i++)ex(D(9+i*6),'transport',pick(['Careem','Taxi']),r(3,8),{scope:'mine',paidBy:R()<.5?'A':'B',method:'wallet'});
+  ex(D(12),'fuel',pick(['Total','Manaseer']),r(18,28),{paidBy:'A'});ex(D(25),'fuel','Manaseer',r(18,28),{paidBy:'A'});
+  if(R()<.6)ex(D(17),'health',pick(['Pharmacy','Clinic']),r(12,35),{scope:'mine',paidBy:R()<.5?'A':'B'});
+  if(R()<.6||mo===8||mo===9)ex(D(19),'clothing',pick(['Zara','LC Waikiki']),r(22,45),{scope:'mine',paidBy:'B',tags:(mo===8||mo===9)?['العودة للمدارس']:[]});
+  if(R()<.5)ex(D(23),'family','Gift for family',r(25,45),{paidBy:'B',method:'cash',tags:['أهل'],split:{type:'custom',customA:40}});
+  if(mi===4)ex(D(14),'home','Home furniture',109.452,{paidBy:'A',tags:['تجهيز البيت']});
+  if(mi===2)ex(D(14),'home','Houseware',r(40,70),{paidBy:'B',tags:['تجهيز البيت']});
+ });
+ T.sort((a,b)=>a.date<b.date?1:-1);d.transactions=T;return d;
+}
+// ---------- state ----------
+const KEY='beitna:v1';
+let S;try{S=JSON.parse(localStorage.getItem(KEY))}catch(e){}
+if(!S||!S.transactions)S=seedData();
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+let UI={route:(location.hash||'#home').slice(1),period:'month',who:'all',compare:'prev',fCat:'',fAcc:'',fMethod:'',fTags:[],view:'house',sheet:null};
+const AR=()=>S.settings.lang==='ar';
+const L=(a,e)=>AR()?a:e;
+const nm=o=>AR()?o.name:(o.nameEn||o.name);
+const pName=p=>p==='joint'?L('مشترك','Joint'):nm(S.partners[p]);
+const other=p=>p==='A'?'B':'A';
+const TODAY=todayStr(), CUR=ym(TODAY);
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+// ---------- formatting ----------
+function num(n,dec=3){const loc=S.settings.numerals==='arabic'?'ar-JO-u-nu-arab':'en-US';
+ return new Intl.NumberFormat(loc,{minimumFractionDigits:dec,maximumFractionDigits:dec}).format(n)}
+const jod=(n,dec)=>{if(dec===undefined)dec=Math.abs(n)>=10000?0:3;return num(n,dec)+' '+L('د.أ','JOD')};
+const pct=(n,sign)=>(sign&&n>0?'+':'')+num(Math.round(n),0)+'%';
+const monthName=(m,short)=>{const i=+m.slice(5)-1;return AR()?(short?MONTHS_AR[i].replace('تشرين الأول','ت١').replace('تشرين الثاني','ت٢').replace('كانون الثاني','ك٢').replace('كانون الأول','ك١'):MONTHS_AR[i]):MONTHS_EN[i]};
+const dateLong=d=>num(+d.slice(8),0).replace(/[٫.,]/g,'')+' '+monthName(d.slice(0,7))+' '+(S.settings.numerals==='arabic'?num(+d.slice(0,4),0).replace(/٬/g,''):d.slice(0,4));
+const cat=k=>CATS[k]||CATS.other;
+const catLabel=k=>cat(k)[0]+' '+(AR()?cat(k)[1]:cat(k)[2]);
+
+// ---------- core calculations ----------
+const incomeRatioA=()=>S.partners.A.monthlyIncome/(S.partners.A.monthlyIncome+S.partners.B.monthlyIncome);
+function shareA(rule){rule=rule||S.settings.defaultSplit;if(rule.type==='equal')return .5;if(rule.type==='income')return incomeRatioA();return (rule.customA??50)/100}
+const acc=id=>S.accounts.find(a=>a.id===id);
+function visibleTx(){const me=S.me;return S.transactions.filter(t=>{const a=acc(t.accountId);return !(a&&a.visibility==='hidden'&&a.owner!==me)})}
+function visibleAccounts(){return S.accounts.filter(a=>!(a.visibility==='hidden'&&a.owner!==S.me))}
+function periodRange(p,shift=0){ // returns [startYm,endYm]
+ if(p==='month')return[addMonths(CUR,-shift),addMonths(CUR,-shift)];
+ if(p==='last')return[addMonths(CUR,-1-shift),addMonths(CUR,-1-shift)];
+ if(p==='3m')return[addMonths(CUR,-2-3*shift),addMonths(CUR,-3*shift)];
+ if(p==='ytd'){const y=+CUR.slice(0,4)-shift;return[y+'-01',shift?y+CUR.slice(4):CUR]}
+ return['0000-00','9999-99']}
+const inRange=(t,[a,b])=>ym(t.date)>=a&&ym(t.date)<=b;
+// portion of a transaction attributable to partner p (for "mine/partner/ours" filters)
+function portion(t,who){if(who==='all')return t.amount;const me=S.me,p=who==='me'?me:who==='partner'?other(me):null;
+ if(who==='ours')return t.scope==='ours'?t.amount:0;
+ if(t.scope==='ours')return 0;return t.owner===p?t.amount:0}
+function totals(tx){let spend=0,income=0,goals=0;tx.forEach(t=>{if(t.kind==='income')income+=t.amount;else if(t.kind==='goal')goals+=t.amount;else spend+=t.amount});return{spend,income,goals}}
+function settlementBalance(){ // positive => B owes A
+ let bal=0;S.transactions.forEach(t=>{if(t.scope!=='ours'||t.kind!=='expense'||t.paidBy==='joint')return;const a=shareA(t.splitRule);
+  if(t.paidBy==='A')bal+=t.amount*(1-a);else bal-=t.amount*a});
+ S.settlements.forEach(s=>{bal+=s.from==='A'?s.amount:-s.amount});return bal}
+function monthsBetween(a,b){const[ya,ma]=a.split('-').map(Number),[yb,mb]=b.split('-').map(Number);return (yb-ya)*12+(mb-ma)}
+function goalInfo(g){const saved=g.contributions.reduce((s,c)=>s+c.amount,0);const left=Math.max(1,monthsBetween(CUR,ym(g.targetDate)));
+ const need=Math.max(0,(g.target-saved)/left);const recent=g.contributions.filter(c=>ym(c.date)>=addMonths(CUR,-3)&&ym(c.date)<CUR).reduce((s,c)=>s+c.amount,0)/3;
+ const byA=g.contributions.filter(c=>c.partner==='A').reduce((s,c)=>s+c.amount,0);
+ return{saved,left,need,avg:recent,onTrack:recent>=need*0.97,pct:Math.min(100,saved/g.target*100),byA,byB:saved-byA}}
+function netWorth(){const v=visibleAccounts();const cashLike=v.filter(a=>a.type!=='savings').reduce((s,a)=>s+a.balance,0);
+ const sav=v.filter(a=>a.type==='savings').reduce((s,a)=>s+a.balance,0);const inv=S.investments.reduce((s,i)=>s+i.value,0);return{cashLike,sav,inv,total:cashLike+sav+inv}}
+function monthSeries(n=6){const out=[];for(let i=n-1;i>=0;i--){const m=addMonths(CUR,-i);const tx=visibleTx().filter(t=>ym(t.date)===m);out.push({m,...totals(tx)})}return out}
+function netWorthSeries(){const nw=netWorth();const ser=monthSeries(6);let run=nw.cashLike+nw.sav;const vals=[];
+ for(let i=ser.length-1;i>=0;i--){const inv=S.investments.reduce((s,x)=>{const h=(x.history||[]).find(h=>h.month===ser[i].m);return s+(h?h.value:x.value)},0);vals.unshift({m:ser[i].m,v:run+inv});run-=ser[i].income-ser[i].spend}return vals}
+function tips(){const out=[];
+ S.goals.forEach(g=>{const gi=goalInfo(g);if(!gi.onTrack&&gi.saved<g.target)out.push({t:L(`هدف «${g.name}» يحتاج ${jod(gi.need)} شهرياً، ومتوسطكما الحالي ${jod(gi.avg)}.`,`“${g.nameEn}” needs ${jod(gi.need)} a month; you're averaging ${jod(gi.avg)}.`),a:L('عدّلوا المبلغ الشهري','Adjust the monthly amount'),act:'goal:'+g.id})});
+ // split drift over last 2 months
+ let paidA=0,tot=0;S.transactions.forEach(t=>{if(t.scope==='ours'&&t.kind==='expense'&&t.paidBy!=='joint'&&ym(t.date)>=addMonths(CUR,-2)){tot+=t.amount;if(t.paidBy==='A')paidA+=t.amount}});
+ const agreed=incomeRatioA()*100,actual=tot?paidA/tot*100:agreed,drift=Math.abs(actual-agreed),bal=settlementBalance();
+ if(drift>8&&Math.abs(bal)>1)out.push({t:L(`نصيبكما من المصاريف المشتركة يبتعد عن الاتفاق بـ ${num(Math.round(drift),0)} نقطة لشهرين. تسوية ${jod(Math.abs(bal))} تعيد التوازن.`,`Your shared-cost split is ${num(Math.round(drift),0)} points off the agreement over two months. A ${jod(Math.abs(bal))} settlement rebalances it.`),a:L('سجّلوا تسوية','Record a settlement'),act:'settle'});
+ const subs=S.bills.filter(b=>b.category==='subscriptions');if(subs.length>1){const sum=subs.reduce((s,b)=>s+b.amount,0);
+  out.push({t:L(`لديكما ${num(subs.length,0)} اشتراكات ترفيهية بمجموع ${jod(sum)} شهرياً (${subs.map(b=>b.name).join('، ')}). راجعوا إن كنتم تستخدمونها كلها.`,`You have ${subs.length} entertainment subscriptions totalling ${jod(sum)} a month (${subs.map(b=>b.nameEn).join(', ')}). Check you still use them all.`),a:L('راجعوا الاشتراكات','Review subscriptions'),act:'route:accounts'})}
+ return out}
+
+// ---------- small render helpers ----------
+const seg=(key,opts,val)=>`<div class="seg" role="tablist">${opts.map(([v,l])=>`<button data-act="set:${key}:${v}" class="${val===v?'on':''}" role="tab" aria-selected="${val===v}">${l}</button>`).join('')}</div>`;
+const statusPill=gi=>gi.saved>=0&&gi.onTrack?`<span class="pill ok">${L('على المسار','On track')}</span>`:`<span class="pill late">${L('متأخر عن الجدول','Behind schedule')}</span>`;
+const splitLabel=r=>!r?'':r.type==='equal'?'50/50':r.type==='income'?L('حسب الدخل','By income'):num(r.customA,0)+'/'+num(100-r.customA,0);
+function barChart(ser){const W=340,H=150,pb=22,max=Math.max(...ser.map(s=>Math.max(s.income,s.spend)),1),bw=(W-20)/ser.length;
+ let g='';[0,.5,1].forEach(f=>{const y=pb+ (H-pb*2)*(1-f);g+=`<line x1="0" x2="${W}" y1="${y}" y2="${y}" stroke="var(--hairline)"/>`});
+ ser.forEach((s,i)=>{const x=10+i*bw,h1=(H-pb*2)*s.income/max,h2=(H-pb*2)*s.spend/max,base=H-pb;
+  g+=`<rect x="${x+bw*.18}" y="${base-h1}" width="${bw*.3}" height="${h1}" rx="3" fill="var(--sage)"/><rect x="${x+bw*.52}" y="${base-h2}" width="${bw*.3}" height="${h2}" rx="3" fill="var(--clay)"/><text x="${x+bw/2}" y="${H-6}" text-anchor="middle">${monthName(s.m,true)}</text>`});
+ return `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="${L('المصروف مقابل الدخل','Spending vs income')}">${g}</svg><div class="legend"><span><i style="background:var(--sage)"></i>${L('إجمالي الدخل','Total income')}</span><span><i style="background:var(--clay)"></i>${L('إجمالي المصروف','Total spending')}</span></div>`}
+function lineChart(ser){const W=340,H=140,p=24,vals=ser.map(s=>s.v),mn=Math.min(...vals)*.995,mx=Math.max(...vals)*1.005;
+ const X=i=>p+(W-2*p)*i/(ser.length-1),Y=v=>p/2+(H-p*1.5)*(1-(v-mn)/(mx-mn||1));
+ const pts=ser.map((s,i)=>X(i)+','+Y(s.v)).join(' ');const last=ser[ser.length-1];
+ return `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="${L('تطور صافي الثروة','Net worth trend')}"><polygon points="${X(0)},${H-p} ${pts} ${X(ser.length-1)},${H-p}" fill="var(--sage-soft)"/><polyline points="${pts}" fill="none" stroke="var(--sage)" stroke-width="2.5"/><circle cx="${X(ser.length-1)}" cy="${Y(last.v)}" r="4.5" fill="var(--sage-ink)"/>${ser.map((s,i)=>`<text x="${X(i)}" y="${H-6}" text-anchor="middle">${monthName(s.m,true)}</text>`).join('')}</svg><div class="muted">${jod(ser[0].v,0)} → <b>${jod(last.v,0)}</b></div>`}
+// ---------- views ----------
+function vHome(){const nw=netWorth(),ser=monthSeries(2),[prev,cur]=ser,ch=prev.spend?(cur.spend-prev.spend)/prev.spend*100:0;
+ const rate=cur.income?(cur.income-cur.spend)/cur.income*100:0,bal=settlementBalance(),debtor=bal>0?'B':'A',creditor=other(debtor);
+ const d=+TODAY.slice(8);const week=S.bills.filter(b=>b.paidMonth!==CUR&&b.dueDay>=d&&b.dueDay<=d+7).sort((a,b)=>a.dueDay-b.dueDay);
+ const me=S.me,inc=S.partners[me].monthlyIncome,myA=me==='A';
+ const billsShare=S.bills.reduce((s,b)=>{const a=shareA(b.splitRule);return s+b.amount*(myA?a:1-a)},0);
+ const goalsShare=S.goals.reduce((s,g)=>{const gi=goalInfo(g);const a=shareA(g.splitRule);return s+gi.need*(myA?a:1-a)},0);
+ const savings=Math.max(0,inc*S.settings.savingsRateTarget/100-goalsShare),personal=Math.max(0,inc-billsShare-goalsShare-savings);
+ const alloc=[[L('للفواتير المشتركة','Shared bills'),billsShare,'clay'],[L('للأهداف','Goals'),goalsShare,''],[L('للتوفير','Savings'),savings,''],[L('مصروف شخصي','Personal'),personal,'late']];
+ const j=S.jamiya[0],T=tips(),rev=S.reviews.find(r=>r.month===CUR)||{},reviewed=rev['reviewed'+me];
+ return `<div class="stack">
+ <div class="card hero"><h3>${L('صافي ثروة البيت','Household net worth')}</h3><div class="big">${jod(nw.total,0)}</div>
+  <div class="sub"><span>${L('حساباتنا','Accounts')} ${jod(nw.cashLike,0)}</span><span>${L('مدخرات','Savings')} ${jod(nw.sav,0)}</span><span>${L('استثمارات','Investments')} ${jod(nw.inv,0)}</span></div></div>
+ <div class="grid2"><div class="card"><h3>${L('إجمالي المصروف','Total spending')}</h3><div class="big">${jod(cur.spend)}</div><div class="muted ${ch>0?'neg':'pos'}">${pct(ch,true)} ${L('عن الشهر الماضي','vs last month')}</div></div>
+  <div class="card"><h3>${L('نسبة التوفير','Savings rate')}</h3><div class="big pos">${pct(rate)}</div><div class="muted">${L('إجمالي الدخل','Income')} ${jod(cur.income,0)}</div></div></div>
+ <div class="card stack" style="gap:8px"><h3>${L('رصيد للتسوية','Balance to settle')}</h3><div class="big">${jod(Math.abs(bal))}</div>
+  <div class="muted">${Math.abs(bal)<.01?L('لا شيء للتسوية','All square'):L(`المتبقي لتسوية من ${pName(debtor)} إلى ${pName(creditor)}`,`Remaining for ${pName(debtor)} to settle with ${pName(creditor)}`)}</div>
+  <div><button class="btn" data-act="settle">${L('سجّل تسوية','Record settlement')}</button></div></div>
+ <div class="sechead"><h2>${L('فواتير هذا الأسبوع','Bills this week')}</h2><button class="link" data-act="route:accounts">${L('عرض الكل','See all')}</button></div>
+ <div class="card list">${week.length?week.map(b=>`<div class="li"><div class="ic">${cat(b.category)[0]}</div><div class="grow"><b>${esc(nm(b))}</b><div class="muted">${b.dueDay===d?L('اليوم','Today'):L(`بعد ${num(b.dueDay-d,0)} أيام`,`In ${b.dueDay-d} days`)}</div></div><div style="text-align:end"><div class="amt">${jod(b.amount)}</div><div class="muted">${splitLabel(b.splitRule)}</div></div></div>`).join(''):`<div class="muted">${L('لا فواتير مستحقة هذا الأسبوع.','No bills due this week.')}</div>`}</div>
+ <div class="sechead"><h2>${L('تقدّم الأهداف','Goal progress')}</h2><button class="link" data-act="route:goals">${L('عرض الكل','See all')}</button></div>
+ ${S.goals.map(g=>{const gi=goalInfo(g);return `<div class="card stack" style="gap:8px"><div class="row"><h2 style="font-size:17px">${esc(nm(g))}</h2>${statusPill(gi)}</div>
+  <div class="bar ${gi.onTrack?'':'late'}"><i style="width:${gi.pct}%"></i></div><div class="row muted"><span>${jod(gi.saved,0)} / ${jod(g.target,0)}</span><span>${L('المطلوب شهرياً','Needed monthly')} ${jod(gi.need)}</span></div>
+  <div><button class="btn sm" data-act="contribute:${g.id}">${L('ادفع للهدف','Pay into goal')}</button></div></div>`}).join('')}
+ ${T.length?`<h2>${L('نصيحة لنا','Tips for us')}</h2><div class="stack" style="gap:10px">${T.map(t=>`<div class="tip"><div>${esc(t.t)}</div><button class="btn sm pri" data-act="${t.act}">${t.a}</button></div>`).join('')}</div>`:''}
+ <div class="card"><h2 style="margin-bottom:8px">${L('المصروف مقابل الدخل','Spending vs income')}</h2>${barChart(monthSeries(6))}</div>
+ <div class="card stack" style="gap:10px"><h2>${L('توزيع الراتب','Salary allocation')}</h2><div class="muted">${L('التوزيع المقترح','Suggested split')} · ${jod(inc)}</div>
+  ${alloc.map(([l,v,c])=>`<div class="catbar"><span>${l}</span><span></span><span class="amt">${jod(v)} · ${pct(v/inc*100)}</span><div class="bar ${c}"><i style="width:${v/inc*100}%"></i></div></div>`).join('')}</div>
+ <div class="card stack" style="gap:8px"><h2>${L('الجمعية','Jam\'iya')}</h2><div class="row"><b>${esc(nm(j))}</b><span class="amt">${jod(j.amount)}</span></div>
+  <div class="muted">${L(`الجولة ${num(j.currentRound,0)} / ${num(j.members.length,0)} · الأعضاء`,`Round ${j.currentRound} / ${j.members.length} · members`)}</div>
+  <div class="chips">${j.members.slice().sort((a,b)=>a.turn-b.turn).map(m=>`<span class="chip ${m.turn===j.currentRound?'on':''}">${esc(nm(m))} · ${num(m.turn,0)}${m.received?' ✓':''}</span>`).join('')}</div></div>
+ <div class="card stack" style="gap:8px"><h2>${L('موعد المال','Money date')}</h2><div class="muted">${monthName(CUR)} ${S.settings.numerals==='arabic'?num(+CUR.slice(0,4),0).replace(/٬/g,''):CUR.slice(0,4)}</div>
+  <h3>${L('ما سار جيداً','What went well')}</h3><div>${L('نسبة التوفير','Savings rate')} ${pct(rate)}</div>
+  ${T[0]?`<h3>${L('تجاوزنا الميزانية','Where we slipped')}</h3><div>${esc(T[0].t)}</div><h3>${L('خطوة واحدة','One step')}</h3><div>${T[0].a}</div>`:''}
+  <div><button class="btn ${reviewed?'':'pri'}" data-act="review" ${reviewed?'disabled':''}>${reviewed?L('تمت المراجعة ✓','Reviewed ✓'):L('راجعتُ','I\'ve reviewed')}</button></div></div>
+ </div>`}
+
+function vGoals(){return `<div class="row"><h1>${L('الأهداف','Goals')}</h1><button class="link" data-act="newgoal">＋ ${L('هدف جديد','New goal')}</button></div><div class="stack">
+ ${S.goals.map(g=>{const gi=goalInfo(g);return `<button class="card stack" style="gap:8px;text-align:start" data-act="goal:${g.id}"><div class="row" style="width:100%"><h2 style="font-size:18px">${esc(nm(g))}</h2>${statusPill(gi)}</div>
+ <div class="muted">${L('التاريخ المستهدف','Target date')} ${dateLong(g.targetDate)} · ${L(`${num(gi.left,0)} شهر متبقٍ`,`${gi.left} months left`)}</div>
+ <div class="bar ${gi.onTrack?'':'late'}" style="width:100%"><i style="width:${gi.pct}%"></i></div>
+ <div class="row muted" style="width:100%"><span>${jod(gi.saved,3)} / ${jod(g.target,3)}</span><span>${pct(gi.pct)}</span></div></button>`}).join('')}</div>`}
+
+function vAccounts(){const owners={A:0,B:1,joint:2};return `<h1>${L('الحسابات','Accounts')}</h1>
+ <div class="chips" style="margin-bottom:12px"><button class="chip" data-act="newacc">＋ ${L('أضف حساباً','Add account')}</button><button class="chip" data-act="linkbank">🏦 ${L('اربط بنكاً','Link a bank')}</button><button class="chip" data-act="csv">📄 ${L('ارفع كشف حساب CSV','Upload CSV statement')}</button></div>
+ <div class="stack">${visibleAccounts().sort((a,b)=>owners[a.owner]-owners[b.owner]).map(a=>`<div class="card row"><div><b>${esc(nm(a))}</b><div class="muted">${AR()?ACC_TYPES[a.type][0]:ACC_TYPES[a.type][1]} · ${pName(a.owner)}${a.linked?' · 🔗':''}</div></div>
+  <div style="text-align:end"><div class="amt" style="font-family:var(--display);font-size:18px">${a.visibility==='hidden'&&a.owner!==S.me?'••••':jod(a.balance)}</div>
+  ${a.visibility==='balance'?`<div class="muted">${L('الرصيد فقط','Balance only')}</div>`:a.visibility==='hidden'?`<div class="muted">${L('مخفي عن الشريك','Hidden from partner')}</div>`:a.goalIds?`<div class="muted">🎯 ${L('مرتبط بأهداف','Linked to goals')}</div>`:''}</div></div>`).join('')}</div>
+ <h2 style="margin:22px 0 8px">${L('الفواتير','Bills')}</h2><div class="card list">${S.bills.slice().sort((a,b)=>a.dueDay-b.dueDay).map(b=>{const paid=b.paidMonth===CUR;return `<div class="li"><div class="ic">${cat(b.category)[0]}</div><div class="grow"><b>${esc(nm(b))}</b><div class="muted">${L('يوم الاستحقاق','Due day')} ${num(b.dueDay,0)} · ${splitLabel(b.splitRule)}</div></div><div style="text-align:end"><div class="amt">${jod(b.amount)}</div>${paid?`<span class="pill ok">${L('مدفوعة','Paid')}</span>`:`<button class="btn sm pri" data-act="paybill:${b.id}">${L('تم الدفع','Mark paid')}</button>`}</div></div>`}).join('')}</div>
+ <h2 style="margin:22px 0 8px">${L('استثمارات','Investments')}</h2><div class="card list">${S.investments.map(i=>{const gain=i.value-i.cost;return `<div class="li"><div class="ic">${INV_IC[i.type]||'📈'}</div><div class="grow"><b>${esc(nm(i))}</b><div class="muted ${gain>=0?'pos':'neg'}">${L('الربح','Gain')} ${jod(gain)} · ${pName(i.owner)}</div></div><div class="amt">${jod(i.value)}</div></div>`}).join('')}</div>`}
+
+function filteredTx(range){return visibleTx().filter(t=>inRange(t,range)&&(!UI.fCat||t.category===UI.fCat)&&(!UI.fAcc||t.accountId===UI.fAcc)&&(!UI.fMethod||t.method===UI.fMethod)&&(!UI.fTags.length||UI.fTags.some(x=>(t.tags||[]).includes(x))))}
+function sumBy(tx,key){const m={};tx.forEach(t=>{if(t.kind!=='expense')return;const v=portion(t,UI.who);if(!v)return;m[t[key]]=(m[t[key]]||0)+v});return m}
+function vInsights(){const range=periodRange(UI.period),prevRange=UI.compare==='prev'?periodRange(UI.period,1):(()=>{const[a,b]=range;return[addMonths(a,-12),addMonths(b,-12)]})();
+ const tx=filteredTx(range),ptx=filteredTx(prevRange);
+ const tot=x=>{let spend=0,income=0,goals=0;x.forEach(t=>{const v=portion(t,UI.who);if(t.kind==='income')income+=v;else if(t.kind==='goal')goals+=v;else spend+=v});return{spend,income,goals}};
+ const c=tot(tx),p=tot(ptx),chg=(a,b)=>b?(a-b)/b*100:null;
+ const byCat=sumBy(tx,'category'),pByCat=sumBy(ptx,'category'),cats=Object.entries(byCat).sort((a,b)=>b[1]-a[1]);
+ const byMer=Object.entries(sumBy(tx,'merchant')).sort((a,b)=>b[1]-a[1]).slice(0,3);
+ const biggest=tx.filter(t=>t.kind==='expense'&&portion(t,UI.who)).sort((a,b)=>b.amount-a.amount)[0];
+ const diffs=[...new Set([...Object.keys(byCat),...Object.keys(pByCat)])].map(k=>[k,(byCat[k]||0)-(pByCat[k]||0),pByCat[k]?((byCat[k]||0)-pByCat[k])/pByCat[k]*100:null]);
+ const ups=diffs.filter(d=>d[1]>0.01).sort((a,b)=>b[1]-a[1]).slice(0,3),downs=diffs.filter(d=>d[1]<-0.01).sort((a,b)=>a[1]-b[1]).slice(0,3);
+ const fixed=cats.filter(([k])=>cat(k)[3]==='fixed').reduce((s,x)=>s+x[1],0),variable=c.spend-fixed;
+ const rate=c.income?(c.income-c.spend)/c.income*100:0;
+ const sel=(key,label,opts)=>`<select id="f-${key}" data-change="${key}" aria-label="${label}"><option value="">${label}</option>${opts.map(([v,l])=>`<option value="${v}" ${UI[key]===v?'selected':''}>${esc(l)}</option>`).join('')}</select>`;
+ const kpi=(l,v,ch,cls='')=>`<div class="card"><h3>${l}</h3><div class="big ${cls}" style="font-size:22px">${v}</div>${ch===undefined?'':`<div class="muted">${ch===null?'—':pct(ch,true)}</div>`}</div>`;
+ const partners=['A','B'].map(pp=>{const mine=tx.filter(t=>t.scope!=='ours'&&t.owner===pp&&t.kind==='expense').reduce((s,t)=>s+t.amount,0);
+  const paidOurs=tx.filter(t=>t.scope==='ours'&&t.paidBy===pp&&t.kind==='expense').reduce((s,t)=>s+t.amount,0);
+  const shareOurs=tx.filter(t=>t.scope==='ours'&&t.kind==='expense').reduce((s,t)=>s+t.amount*(pp==='A'?shareA(t.splitRule):1-shareA(t.splitRule)),0);
+  const inc=tx.filter(t=>t.kind==='income'&&t.owner===pp).reduce((s,t)=>s+t.amount,0);
+  const goals=tx.filter(t=>t.kind==='goal'&&t.owner===pp).reduce((s,t)=>s+t.amount,0);return{pp,mine,paidOurs,shareOurs,inc,goals}});
+ return `<h1>${L('التحليلات','Insights')}</h1><div class="stack" style="gap:10px">
+ ${seg('period',[['month',L('هذا الشهر','This month')],['last',L('الشهر الماضي','Last month')],['3m',L('آخر ٣ أشهر','Last 3 months')],['ytd',L('من بداية السنة','Year to date')]],UI.period)}
+ ${seg('who',[['all',L('الكل','All')],['me',L('لي','Mine')],['partner',L('الشريك','Partner')],['ours',L('لنا','Ours')]],UI.who)}
+ ${seg('compare',[['prev',L('مقارنة بالفترة السابقة','vs previous period')],['yoy',L('نفس الفترة العام الماضي','Same period last year')]],UI.compare)}
+ <div class="selrow">${sel('fCat',L('الفئة','Category'),EXP_CATS.map(k=>[k,catLabel(k)]))}${sel('fAcc',L('الحساب','Account'),visibleAccounts().map(a=>[a.id,nm(a)]))}${sel('fMethod',L('طريقة الدفع','Payment method'),Object.entries(METHODS).map(([k,v])=>[k,AR()?v[0]:v[1]]))}</div>
+ <div class="chips">${TAGS.map(([a,e])=>`<button class="chip ${UI.fTags.includes(a)?'on':''}" data-act="tag:${a}">${AR()?a:e}</button>`).join('')}</div>
+ ${seg('view',[['house',L('نظرة عامة على البيت','Household overview')],['partners',L('عرض الشريكين','Partner view')]],UI.view)}</div>
+ <div class="stack" style="margin-top:14px">
+ ${UI.view==='partners'?`<div class="grid2">${partners.map(x=>`<div class="card stack" style="gap:6px"><h2 style="font-size:18px">${pName(x.pp)}</h2>
+  <div class="muted">${L('الدخل','Income')}</div><b>${jod(x.inc)}</b><div class="muted">${L('مصروف شخصي','Personal spending')}</div><b>${jod(x.mine)}</b>
+  <div class="muted">${L('دفع من المشترك','Paid toward shared')}</div><b>${jod(x.paidOurs)}</b><div class="muted">${L('نصيبه المتفق عليه','Agreed share')}</div><b>${jod(x.shareOurs)}</b>
+  <div class="muted">${L('للأهداف','To goals')}</div><b>${jod(x.goals)}</b></div>`).join('')}</div>`:''}
+ <div class="grid2">${kpi(L('إجمالي المصروف','Total spending'),jod(c.spend),chg(c.spend,p.spend))}${kpi(L('إجمالي الدخل','Total income'),jod(c.income,0),chg(c.income,p.income))}
+ ${kpi(L('نسبة التوفير','Savings rate'),pct(rate),undefined,'pos')}${kpi(L('المبالغ المحوّلة','Moved to goals'),jod(c.goals),undefined,'warn')}</div>
+ <div class="card stack" style="gap:10px"><h2>${L('المصروف حسب الفئة','Spending by category')}</h2>${cats.length?cats.map(([k,v])=>`<div class="catbar"><span>${catLabel(k)}</span><span class="amt">${jod(v)}</span><span class="muted">${pct(v/c.spend*100)}</span><div class="bar clay"><i style="width:${v/cats[0][1]*100}%"></i></div></div>`).join(''):`<div class="muted">${L('لا مصاريف في هذه الفترة.','No spending in this period.')}</div>`}</div>
+ <div class="card"><h2 style="margin-bottom:6px">${L('أعلى ٣ فئات','Top 3 categories')}</h2><div class="list">${cats.slice(0,3).map(([k,v])=>`<div class="li"><div class="ic">${cat(k)[0]}</div><div class="grow">${AR()?cat(k)[1]:cat(k)[2]}</div><div class="amt">${jod(v)}</div></div>`).join('')}</div></div>
+ <div class="card"><h2 style="margin-bottom:6px">${L('أعلى ٣ متاجر','Top 3 merchants')}</h2><div class="list">${byMer.map(([k,v])=>{const t=tx.find(x=>x.merchant===k);return `<div class="li"><div class="grow">${esc(AR()?k:(t&&t.merchantEn)||k)}</div><div class="amt">${jod(v)}</div></div>`}).join('')}</div></div>
+ ${biggest?`<div class="card"><h3>${L('أكبر مصروف واحد','Largest single expense')}</h3><b>${esc(AR()?biggest.merchant:biggest.merchantEn)}</b><div class="big" style="font-size:22px">${jod(biggest.amount)}</div><div class="muted">${dateLong(biggest.date)}</div></div>`:''}
+ <div class="grid2"><div class="card"><h3>${L('أكبر الزيادات','Biggest increases')}</h3><div class="list">${ups.map(([k,d,pc])=>`<div class="li"><div class="grow">${catLabel(k)}<div class="muted neg">+${jod(d)}${pc===null?'':' · '+pct(pc,true)}</div></div></div>`).join('')||`<div class="muted">—</div>`}</div></div>
+  <div class="card"><h3>${L('أكبر الانخفاضات','Biggest decreases')}</h3><div class="list">${downs.map(([k,d,pc])=>`<div class="li"><div class="grow">${catLabel(k)}<div class="muted pos">−${jod(-d)}${pc===null?'':' · '+pct(pc)}</div></div></div>`).join('')||`<div class="muted">—</div>`}</div></div></div>
+ <div class="card"><h2 style="margin-bottom:8px">${L('المصروف مقابل الدخل','Spending vs income')}</h2>${barChart(monthSeries(UI.period==='ytd'?Math.min(6,+CUR.slice(5)):UI.period==='3m'?3:2))}<div class="muted" style="margin-top:6px">${L('فجوة التوفير','Savings gap')}: ${jod(c.income-c.spend)}</div></div>
+ <div class="card stack" style="gap:10px"><h2>${L('ثابت مقابل متغيّر','Fixed vs variable')}</h2>${[[L('ثابت','Fixed'),fixed,'clay'],[L('متغيّر','Variable'),variable,'']].map(([l,v,cl])=>`<div class="catbar"><span>${l}</span><span class="amt">${jod(v)}</span><span class="muted">${pct(c.spend?v/c.spend*100:0)}</span><div class="bar ${cl}"><i style="width:${c.spend?v/c.spend*100:0}%"></i></div></div>`).join('')}</div>
+ <div class="card"><h2 style="margin-bottom:8px">${L('تطور صافي الثروة','Net worth trend')}</h2>${lineChart(netWorthSeries())}</div>
+ </div>`}
+
+function vMe(){const st=S.settings,me=S.me;const rule=(r,key)=>seg(key,[['equal','50/50'],['income',L('حسب الدخل','By income')],['custom',L('نسبة مخصصة','Custom')]],r.type);
+ const crule=k=>(st.categoryRules.find(c=>c.category===k)||{splitRule:st.defaultSplit}).splitRule;
+ const tg=(k,l)=>`<div class="toggle"><span>${l}</span><button class="sw ${st[k]?'on':''}" data-act="toggle:${k}" role="switch" aria-checked="${!!st[k]}" aria-label="${l}"></button></div>`;
+ const hidden=S.accounts.filter(a=>a.visibility==='hidden'&&a.owner===me);
+ return `<h1>${L('أنا','Me')}</h1><div class="stack">
+ <div class="card stack" style="gap:8px"><h3>${L('بدّل الشريك المعروض','Switch partner view')}</h3>${seg('me',[['A',nm(S.partners.A)],['B',nm(S.partners.B)]],me)}
+  <div class="muted">${hidden.length?L(`الحسابات المخفية عن ${pName(other(me))} لا تظهر في شاشاته ولا في التحليلات.`,`Accounts hidden from ${pName(other(me))} don't appear on their screens or in insights.`):L('لا حسابات مخفية لديك.','You have no hidden accounts.')}</div></div>
+ <div class="card stack" style="gap:8px"><h3>${L('اللغة','Language')}</h3>${seg('lang',[['ar','العربية'],['en','English']],st.lang)}<h3>${L('الأرقام','Numerals')}</h3>${seg('numerals',[['arabic','١٢٣'],['latin','123']],st.numerals)}</div>
+ <div class="card stack" style="gap:8px"><h3>${L('الاشتراك','Plan')}</h3><h2>${st.plan==='plus'?L('بلَس','Plus'):L('مجاني','Free')}</h2><div class="muted">${L('اشتراك واحد يغطي الشريكين','One plan covers both partners')}</div>
+  <div><b>${jod(4.99)}</b> ${L('شهرياً','a month')} · <span class="muted">${jod(44.9)} ${L('سنوياً · ١٤ يوم تجربة','a year · 14-day trial')}</span></div>
+  <div class="muted">${[L('أهداف غير محدودة','Unlimited goals'),L('السجل الكامل وكل الفلاتر','Full history and all filters'),L('عرض الشريكين','Partner view'),L('النصائح','Tips'),L('الاستثمارات','Investments'),L('التصدير','Export')].map(x=>'· '+x).join('<br>')}</div>
+  <div><button class="btn sm" data-act="plan">${st.plan==='plus'?L('العودة للمجانية','Switch to Free'):L('رقِّ إلى بلَس','Upgrade to Plus')}</button></div></div>
+ <div class="card stack" style="gap:8px"><h3>${L('المصاريف المشتركة','Shared expenses')}</h3><b>${L('قاعدة التقسيم','Default split')}</b>${rule(st.defaultSplit,'split:default')}
+  <b>${L('قواعد حسب الفئة','Rules by category')}</b>${['rent','groceries','dining','subscriptions','family'].map(k=>`<div>${catLabel(k)}</div>${rule(crule(k),'split:'+k)}`).join('')}
+  <div class="muted">${L(`حسب الدخل: ${pName('A')} ${pct(incomeRatioA()*100)} · ${pName('B')} ${pct(100-incomeRatioA()*100)}`,`By income: ${pName('A')} ${pct(incomeRatioA()*100)} · ${pName('B')} ${pct(100-incomeRatioA()*100)}`)}</div></div>
+ <div class="card stack" style="gap:8px"><h3>${L('نسبة التوفير المستهدفة','Savings rate target')}</h3><div class="row"><input id="rate" type="range" min="5" max="50" step="1" value="${st.savingsRateTarget}" data-change="rate" style="flex:1"><b>${pct(st.savingsRateTarget)}</b></div></div>
+ <div class="card"><h3>${L('الأمان','Security')}</h3>${tg('biometric',L('الدخول بالبصمة','Biometric sign-in'))}${tg('twoFactor',L('التحقق بخطوتين','Two-step verification'))}${tg('pinSet',L('رمز PIN قبل أي دفعة','PIN before any payment'))}<div class="muted">${L('لا تُنفَّذ أي دفعة دون تأكيد الدافع','No payment goes through without the payer confirming')}</div></div>
+ <div class="card stack" style="gap:8px"><h3>${L('دعوة الشريك برابط','Invite your partner')}</h3><div class="mono" id="invite">https://beitna.app/join/${S.partners[other(me)].nameEn.toLowerCase()}-7f3d</div><div><button class="btn sm" data-act="copyinvite">${L('انسخ الرابط','Copy link')}</button></div></div>
+ <div class="card"><h3>${L('الوصولية','Accessibility')}</h3><div class="muted">${L('أزرار كبيرة، خط يتبع إعدادات هاتفك، تباين عالٍ، وتسميات صوتية بالعربية والإنجليزية.','Large buttons, text that follows your phone settings, high contrast, and screen-reader labels in Arabic and English.')}</div></div>
+ <div class="card stack" style="gap:8px"><h3>${L('فصل الحساب المشترك','Separate the joint account')}</h3><div class="muted">${L('نصدّر السجل الكامل للطرفين، ونقسّم الأهداف حسب سجل المساهمات.','We export the full history for both of you and split goals by each person\'s contributions.')}</div>
+  <div class="chips"><button class="btn sm" data-act="export">${L('تصدير البيانات','Export data')}</button><button class="btn sm danger" data-act="separate">${L('فصل الحساب المشترك','Separate account')}</button><button class="btn sm" data-act="reset">${L('إعادة البيانات التجريبية','Reset demo data')}</button></div></div>
+ </div>`}
+// ---------- sheets ----------
+let draft=null;
+function newDraft(kind='expense'){const me=S.me;return{kind,amount:'',date:TODAY,accountId:me==='A'?'acc_a_bank':'acc_b_bank',scope:'ours',category:'groceries',merchant:'',method:'card',split:(S.settings.categoryRules.find(c=>c.category==='groceries')||{splitRule:S.settings.defaultSplit}).splitRule.type,customA:50,tags:[],quick:''}}
+const sheetHead=t=>`<div class="row"><h2>${t}</h2><button class="link" data-act="close">${L('إغلاق','Close')}</button></div>`;
+function sAdd(){const d=draft,inc=d.kind==='income';const accs=visibleAccounts().filter(a=>a.owner===S.me||a.owner==='joint');
+ return `${sheetHead(inc?L('سجّل دخلاً','Record income'):L('سجّل مصروف','Record expense'))}
+ ${seg('dkind',[['expense',L('مصروف','Expense')],['income',L('دخل','Income')]],d.kind)}
+ <label class="f">🎙️ ${L('إدخال سريع','Quick entry')}<div class="row"><input id="quick" type="text" placeholder="${L('«دفعت ٢٥ دينار بقالة»','“paid 25 dinars groceries”')}" value="${esc(d.quick)}" data-input="quick"><button class="btn sm" data-act="parse">${L('حلّل','Fill')}</button></div></label>
+ <label class="f">${L('المبلغ','Amount')}<input id="amt" type="text" inputmode="decimal" placeholder="0.000" value="${esc(d.amount)}" data-input="amount"></label>
+ <label class="f">${L('التاريخ','Date')}<input id="date" type="date" value="${d.date}" data-input="date"></label>
+ <label class="f">${L('الحساب','Account')}<select id="acc" data-input="accountId">${accs.map(a=>`<option value="${a.id}" ${a.id===d.accountId?'selected':''}>${esc(nm(a))} — ${jod(a.balance,a.balance>=1000?0:3)}</option>`).join('')}</select></label>
+ ${inc?'':`<div class="f" style="display:flex;flex-direction:column;gap:4px;font-size:12.5px;font-weight:600">${L('النطاق','Scope')}${seg('dscope',[['mine',L('لي','Mine')],['ours',L('لنا','Ours')]],d.scope)}</div>
+ <label class="f">${L('الفئة','Category')}<select id="cat" data-input="category">${EXP_CATS.map(k=>`<option value="${k}" ${k===d.category?'selected':''}>${catLabel(k)}</option>`).join('')}</select></label>`}
+ <label class="f">${inc?L('المصدر','Source'):L('المتجر','Merchant')}<input id="mer" type="text" value="${esc(d.merchant)}" data-input="merchant"></label>
+ <div class="f" style="display:flex;flex-direction:column;gap:4px;font-size:12.5px;font-weight:600">${L('طريقة الدفع','Payment method')}${seg('dmethod',Object.entries(METHODS).map(([k,v])=>[k,AR()?v[0]:v[1]]),d.method)}</div>
+ ${!inc&&d.scope==='ours'?`<div class="f" style="display:flex;flex-direction:column;gap:4px;font-size:12.5px;font-weight:600">${L('قاعدة التقسيم','Split rule')}${seg('dsplit',[['equal','50/50'],['income',L('حسب الدخل','By income')],['custom',L('نسبة مخصصة','Custom')]],d.split)}
+  ${d.split==='custom'?`<div class="row"><span>${pName('A')}</span><input id="cust" type="range" min="0" max="100" value="${d.customA}" data-input="customA" style="flex:1"><span>${num(d.customA,0)}/${num(100-d.customA,0)}</span></div>`:''}</div>`:''}
+ <div class="f" style="display:flex;flex-direction:column;gap:6px;font-size:12.5px;font-weight:600">${L('وسوم','Tags')}<div class="chips">${TAGS.map(([a,e])=>`<button class="chip ${d.tags.includes(a)?'on':''}" data-act="dtag:${a}">${AR()?a:e}</button>`).join('')}</div></div>
+ <button class="link" data-act="csv">📄 ${L('ارفع كشف حساب CSV','Upload CSV statement')}</button>
+ <button class="btn pri" data-act="savetx">${L('حفظ','Save')}</button>`}
+function sSettle(){const bal=settlementBalance(),debtor=bal>0?'B':'A';return `${sheetHead(L('سجّل تسوية','Record settlement'))}
+ <div class="muted">${L(`من ${pName(debtor)} إلى ${pName(other(debtor))}`,`From ${pName(debtor)} to ${pName(other(debtor))}`)}</div>
+ <label class="f">${L('المبلغ','Amount')}<input id="samt" type="text" inputmode="decimal" value="${Math.abs(bal).toFixed(3)}"></label>
+ <button class="btn pri" data-act="savesettle:${debtor}">${L('حفظ التسوية','Save settlement')}</button>
+ <div class="muted">${L('السابقة','Previous')}: ${S.settlements.slice(-3).reverse().map(s=>`${pName(s.from)} → ${pName(s.to)} ${jod(s.amount)} (${dateLong(s.date)})`).join(' · ')||'—'}</div>`}
+function sContribute(gid){const g=S.goals.find(x=>x.id===gid),gi=goalInfo(g),a=shareA(g.splitRule),mine=gi.need*(S.me==='A'?a:1-a);return `${sheetHead(L('ادفع للهدف','Pay into goal'))}<b>${esc(nm(g))}</b>
+ <label class="f">${L('المبلغ','Amount')}<input id="camt" type="text" inputmode="decimal" value="${mine.toFixed(3)}"></label><div class="muted">${L('نصيبك المقترح هذا الشهر','Your suggested share this month')}: ${jod(mine)}</div>
+ <button class="btn pri" data-act="savecontrib:${gid}">${L('حوّل','Transfer')}</button>`}
+function sGoal(gid){const g=S.goals.find(x=>x.id===gid),gi=goalInfo(g);return `${sheetHead(esc(nm(g)))}${statusPill(gi)}
+ <div class="bar ${gi.onTrack?'':'late'}"><i style="width:${gi.pct}%"></i></div><div class="row muted"><span>${jod(gi.saved)} / ${jod(g.target)}</span><span>${pct(gi.pct)}</span></div>
+ <div class="grid2"><div class="card"><h3>${pName('A')}</h3><b>${jod(gi.byA)}</b></div><div class="card"><h3>${pName('B')}</h3><b>${jod(gi.byB)}</b></div></div>
+ <div class="muted">${L('المطلوب شهرياً','Needed monthly')} ${jod(gi.need)} · ${L('متوسطكما','Your average')} ${jod(gi.avg)} · ${L('التقسيم','Split')} ${splitLabel(g.splitRule)}</div>
+ <label class="f">${L('المبلغ المستهدف','Target')}<input id="gt" type="text" inputmode="decimal" value="${g.target}"></label>
+ <label class="f">${L('التاريخ المستهدف','Target date')}<input id="gd" type="date" value="${g.targetDate}"></label>
+ <div class="chips"><button class="btn sm" data-act="savegoal:${gid}">${L('حفظ التعديل','Save changes')}</button><button class="btn sm pri" data-act="contribute:${gid}">${L('ادفع للهدف','Pay into goal')}</button></div>
+ <h3>${L('سجل المساهمات','Contributions')}</h3><div class="list">${g.contributions.slice().reverse().slice(0,8).map(c=>`<div class="li"><div class="grow">${pName(c.partner)} <span class="muted">${dateLong(c.date)}</span></div><div class="amt">${jod(c.amount)}</div></div>`).join('')}</div>`}
+function sNewGoal(){return `${sheetHead(L('هدف جديد','New goal'))}<label class="f">${L('الاسم','Name')}<input id="ng-n" type="text"></label>
+ <label class="f">${L('المبلغ المستهدف','Target')}<input id="ng-t" type="text" inputmode="decimal"></label><label class="f">${L('التاريخ المستهدف','Target date')}<input id="ng-d" type="date" value="${addMonths(CUR,12)}-01"></label>
+ <button class="btn pri" data-act="savenewgoal">${L('أنشئ الهدف','Create goal')}</button>`}
+function sNewAcc(){return `${sheetHead(L('أضف حساباً','Add account'))}<label class="f">${L('الاسم','Name')}<input id="na-n" type="text"></label>
+ <label class="f">${L('النوع','Type')}<select id="na-t">${Object.entries(ACC_TYPES).map(([k,v])=>`<option value="${k}">${AR()?v[0]:v[1]}</option>`).join('')}</select></label>
+ <label class="f">${L('المالك','Owner')}<select id="na-o"><option value="${S.me}">${pName(S.me)}</option><option value="joint">${pName('joint')}</option></select></label>
+ <label class="f">${L('الرصيد','Balance')}<input id="na-b" type="text" inputmode="decimal" value="0"></label>
+ <label class="f">${L('ما يراه الشريك','What your partner sees')}<select id="na-v"><option value="full">${L('كل شيء','Everything')}</option><option value="balance">${L('الرصيد فقط','Balance only')}</option><option value="hidden">${L('مخفي','Hidden')}</option></select></label>
+ <button class="btn pri" data-act="savenewacc">${L('أضف','Add')}</button>`}
+const sInfo=(t,b)=>`${sheetHead(t)}<div>${b}</div><button class="btn" data-act="close">${L('حسناً','OK')}</button>`;
+function sCsv(){return `${sheetHead(L('ارفع كشف حساب CSV','Upload CSV statement'))}<div class="muted">${L('أعمدة: التاريخ، المبلغ، الوصف (اختياري: الفئة). تُضاف كمصاريف في الحساب المختار.','Columns: date, amount, description (optional: category). Rows are added as expenses to the chosen account.')}</div>
+ <label class="f">${L('الحساب','Account')}<select id="csv-a">${visibleAccounts().filter(a=>a.owner===S.me||a.owner==='joint').map(a=>`<option value="${a.id}">${esc(nm(a))}</option>`).join('')}</select></label>
+ <input id="csv-f" type="file" accept=".csv,text/csv" data-change="csvfile"><div id="csv-out" class="muted"></div>`}
+function sExport(){return `${sheetHead(L('تصدير البيانات','Export data'))}<div class="muted">${L('انسخ هذا النص واحفظه في ملف JSON.','Copy this text and save it as a JSON file.')}</div><textarea id="exp" rows="8" readonly>${esc(JSON.stringify(S))}</textarea><button class="btn pri" data-act="copyexp">${L('انسخ','Copy')}</button>`}
+function sConfirm(kind){const t=kind==='reset'?[L('إعادة البيانات التجريبية؟','Reset demo data?'),L('ستُحذف كل التعديلات وتعود البيانات التجريبية.','All your changes will be replaced with the demo data.')]:[L('فصل الحساب المشترك؟','Separate the joint account?'),L('في هذه النسخة التجريبية نعرض فقط ما سيحدث: يُصدَّر السجل للطرفين وتُقسَّم الأهداف حسب المساهمات.','In this demo we only show what would happen: the history is exported for both of you and goals are split by contribution.')];
+ return `${sheetHead(t[0])}<div>${t[1]}</div><div class="chips"><button class="btn danger" data-act="do:${kind}">${L('تأكيد','Confirm')}</button><button class="btn" data-act="close">${L('إلغاء','Cancel')}</button></div>`}
+
+// ---------- render ----------
+function render(){const st=S.settings;document.documentElement.lang=st.lang;document.documentElement.dir=AR()?'rtl':'ltr';
+ const titles={home:['بيتنا — نُدير مالنا معاً','Beitna'],goals:['الأهداف · بيتنا','Goals · Beitna'],accounts:['الحسابات · بيتنا','Accounts · Beitna'],insights:['التحليلات · بيتنا','Insights · Beitna'],me:['أنا · بيتنا','Settings · Beitna']};
+ const r=titles[UI.route]?UI.route:'home';document.title=AR()?titles[r][0]:titles[r][1];
+ const view={home:vHome,goals:vGoals,accounts:vAccounts,insights:vInsights,me:vMe}[r]();
+ const tabs=[['home','🏠',L('الرئيسية','Home')],['goals','🎯',L('الأهداف','Goals')],['accounts','🏦',L('الحسابات','Accounts')],['insights','📊',L('التحليلات','Insights')],['me','🫂',L('أنا','Me')]];
+ let sheet='';if(UI.sheet){const[k,arg]=UI.sheet;sheet=({add:sAdd,settle:sSettle,contribute:sContribute,goal:sGoal,newgoal:sNewGoal,newacc:sNewAcc,csv:sCsv,export:sExport,confirm:sConfirm,info:()=>sInfo(...arg)})[k](arg)}
+ const scroll=document.querySelector('.sheet')?.scrollTop;
+ document.getElementById('app').innerHTML=`<div class="wrap"><header class="top"><div class="brand"><small>${L('نُدير مالنا معاً','Managing our money together')}</small><b>${L('بيتنا','Beitna')}</b></div>
+ <div class="hbtns"><button class="circ" data-act="numerals" aria-label="${L('الأرقام','Numerals')}">${st.numerals==='arabic'?'123':'١٢٣'}</button><button class="circ" data-act="lang" aria-label="Language">${AR()?'EN':'ع'}</button><button class="circ me" data-act="swapme" aria-label="${L('بدّل الشريك','Switch partner')}">${nm(S.partners[S.me]).slice(0,1)}</button></div></header>
+ <main>${view}</main></div>
+ <button class="fab" data-act="add">＋ ${L('سجّل مصروف','Add expense')}</button>
+ <nav class="tabs"><div class="in">${tabs.map(([k,i,l])=>`<button class="${k===r?'on':''}" data-act="route:${k}" aria-current="${k===r?'page':'false'}"><span>${i}</span>${l}</button>`).join('')}</div></nav>
+ ${sheet?`<div class="sheet-bg" data-act="bgclose"><div class="sheet" role="dialog" aria-modal="true">${sheet}</div></div>`:''}`;
+ if(scroll)document.querySelector('.sheet').scrollTop=scroll}
+let toastT;function toast(m){document.querySelector('.toast')?.remove();const d=document.createElement('div');d.className='toast';d.textContent=m;document.body.appendChild(d);clearTimeout(toastT);toastT=setTimeout(()=>d.remove(),2200)}
+const commit=(msg)=>{save();UI.sheet=null;render();if(msg)toast(msg)};
+const val=id=>document.getElementById(id)?.value;
+const toNum=s=>{s=String(s||'').replace(/[٠-٩]/g,c=>'٠١٢٣٤٥٦٧٨٩'.indexOf(c)).replace(/[٫,]/g,'.').replace(/[^\d.]/g,'');return parseFloat(s)};
+
+function parseQuick(text){const n=toNum((text.match(/[\d٠-٩]+([.,٫][\d٠-٩]+)?/)||[''])[0]);if(n)draft.amount=String(n);
+ const low=text.toLowerCase();for(const k of EXP_CATS){const[,ar,en]=CATS[k];if(low.includes(ar)||low.includes(en.toLowerCase().split(' ')[0])){draft.category=k;break}}
+ if(/بقال|grocer/.test(low))draft.category='groceries';if(/قهو|كوفي|coffee/.test(low))draft.category='dining';if(/بنزين|fuel|petrol/.test(low))draft.category='fuel';if(/تاكسي|كريم|taxi|careem/.test(low))draft.category='transport'}
+
+function addTx(t){S.transactions.unshift(t);const a=acc(t.accountId);if(a)a.balance+=t.kind==='income'?t.amount:-t.amount}
+
+document.addEventListener('click',e=>{const el=e.target.closest('[data-act]');if(!el)return;const a=el.dataset.act;
+ if(a==='bgclose'){if(e.target===el){UI.sheet=null;render()}return}
+ const[k,v,w]=a.split(':');
+ switch(k){
+ case'route':UI.route=v;UI.sheet=null;try{history.replaceState(null,'','#'+v)}catch(_){}render();scrollTo(0,0);break;
+ case'set':if(v==='lang'||v==='numerals'){S.settings[v]=w;save()}else if(v==='me'){S.me=w;save()}
+  else if(v==='dkind'){draft.kind=w;draft.category=w==='income'?'salary':'groceries';draft.method=w==='income'?'bank':'card'}else if(v==='dscope')draft.scope=w;else if(v==='dmethod')draft.method=w;else if(v==='dsplit')draft.split=w;
+  else if(v==='split'){}else UI[v]=w;render();break;
+ case'lang':S.settings.lang=AR()?'en':'ar';save();render();break;
+ case'numerals':S.settings.numerals=S.settings.numerals==='arabic'?'latin':'arabic';save();render();break;
+ case'swapme':S.me=other(S.me);save();render();toast(L(`تعرض الآن شاشة ${pName(S.me)}`,`Now viewing as ${pName(S.me)}`));break;
+ case'add':draft=newDraft();UI.sheet=['add'];render();break;
+ case'close':UI.sheet=null;render();break;
+ case'settle':UI.sheet=['settle'];render();break;
+ case'contribute':UI.sheet=['contribute',v];render();break;
+ case'goal':UI.sheet=['goal',v];render();break;
+ case'newgoal':UI.sheet=['newgoal'];render();break;
+ case'newacc':UI.sheet=['newacc'];render();break;
+ case'csv':UI.sheet=['csv'];render();break;
+ case'export':UI.sheet=['export'];render();break;
+ case'separate':case'reset':UI.sheet=['confirm',k];render();break;
+ case'linkbank':UI.sheet=['info',[L('اربط بنكاً','Link a bank'),L('ربط البنوك عبر الخدمات المصرفية المفتوحة غير متاح في هذه النسخة. استخدم «ارفع كشف حساب CSV» لاستيراد الحركات.','Open-banking connections aren\'t available in this version. Use “Upload CSV statement” to import transactions.')]];render();break;
+ case'tag':UI.fTags=UI.fTags.includes(v)?UI.fTags.filter(x=>x!==v):[...UI.fTags,v];render();break;
+ case'dtag':draft.tags=draft.tags.includes(v)?draft.tags.filter(x=>x!==v):[...draft.tags,v];render();break;
+ case'parse':parseQuick(draft.quick||'');render();break;
+ case'savetx':{const amt=toNum(draft.amount);if(!amt){toast(L('أدخل المبلغ','Enter an amount'));return}const a=acc(draft.accountId),inc=draft.kind==='income';
+  const rule=draft.split==='custom'?{type:'custom',customA:+draft.customA}:{type:draft.split};const mer=draft.merchant||(inc?L('دخل','Income'):(AR()?cat(draft.category)[1]:cat(draft.category)[2]));
+  addTx({id:'t_'+Date.now(),date:draft.date,amount:amt,accountId:a.id,owner:a.owner,paidBy:a.owner,scope:inc?'mine':draft.scope,category:inc?'salary':draft.category,merchant:mer,merchantEn:mer,method:draft.method,splitRule:!inc&&draft.scope==='ours'?rule:undefined,tags:draft.tags,kind:inc?'income':'expense'});
+  commit(L('تم الحفظ','Saved'));break}
+ case'savesettle':{const amt=toNum(val('samt'));if(!amt)return;S.settlements.push({id:'s_'+Date.now(),date:TODAY,from:v,to:other(v),amount:amt});commit(L('سُجّلت التسوية','Settlement recorded'));break}
+ case'savecontrib':{const amt=toNum(val('camt'));if(!amt)return;const g=S.goals.find(x=>x.id===v),me=S.me;g.contributions.push({id:'c_'+Date.now(),partner:me,amount:amt,date:TODAY});
+  addTx({id:'t_'+Date.now(),date:TODAY,amount:amt,accountId:me==='A'?'acc_a_bank':'acc_b_bank',owner:me,paidBy:me,scope:'ours',category:'goal',merchant:g.name,merchantEn:g.nameEn,method:'bank',splitRule:g.splitRule,goalId:g.id,kind:'goal'});
+  const sv=S.accounts.find(x=>(x.goalIds||[]).includes(g.id));if(sv)sv.balance+=amt;commit(L('تم التحويل للهدف','Transferred to goal'));break}
+ case'savegoal':{const g=S.goals.find(x=>x.id===v),t=toNum(val('gt'));if(t)g.target=t;if(val('gd'))g.targetDate=val('gd');commit(L('تم الحفظ','Saved'));break}
+ case'savenewgoal':{const n=val('ng-n'),t=toNum(val('ng-t'));if(!n||!t){toast(L('أدخل الاسم والمبلغ','Enter a name and target'));return}
+  S.goals.push({id:'g_'+Date.now(),name:n,nameEn:n,template:'custom',target:t,targetDate:val('ng-d'),splitRule:S.settings.defaultSplit,contributions:[]});commit(L('أُنشئ الهدف','Goal created'));break}
+ case'savenewacc':{const n=val('na-n');if(!n){toast(L('أدخل اسم الحساب','Enter an account name'));return}
+  S.accounts.push({id:'acc_'+Date.now(),name:n,nameEn:n,type:val('na-t'),owner:val('na-o'),balance:toNum(val('na-b'))||0,visibility:val('na-v')});commit(L('أُضيف الحساب','Account added'));break}
+ case'paybill':{const b=S.bills.find(x=>x.id===v),a=acc(b.accountId);b.paidMonth=CUR;
+  addTx({id:'t_'+Date.now(),date:TODAY,amount:b.amount,accountId:b.accountId,owner:a.owner,paidBy:a.owner,scope:b.category==='health'?'mine':'ours',category:b.category,merchant:b.name,merchantEn:b.nameEn,method:'bank',splitRule:b.splitRule,tags:[],kind:'expense',recurring:true});commit(L('سُجّلت الفاتورة كمدفوعة','Bill marked paid'));break}
+ case'review':{let r=S.reviews.find(x=>x.month===CUR);if(!r){r={month:CUR};S.reviews.push(r)}r['reviewed'+S.me]=true;commit(L('شكراً، تمت المراجعة','Review saved'));break}
+ case'toggle':S.settings[v]=!S.settings[v];save();render();break;
+ case'plan':S.settings.plan=S.settings.plan==='plus'?'free':'plus';save();render();break;
+ case'copyinvite':case'copyexp':{const txt=k==='copyinvite'?document.getElementById('invite').textContent:val('exp');
+  const sel=()=>{const n=document.getElementById(k==='copyinvite'?'invite':'exp');const r=document.createRange();r.selectNodeContents(n);if(n.select)n.select();else{getSelection().removeAllRanges();getSelection().addRange(r)}toast(L('النص محدد، انسخه يدوياً','Text selected, copy it manually'))};
+  try{navigator.clipboard.writeText(txt).then(()=>toast(L('تم النسخ','Copied')),sel)}catch(_){sel()}break}
+ case'do':if(v==='reset'){S=seedData();UI.fTags=[];commit(L('عادت البيانات التجريبية','Demo data restored'))}else{commit(L('هذه نسخة تجريبية؛ لم يُفصل أي حساب','Demo only; nothing was separated'))}break;
+ }});
+document.addEventListener('input',e=>{const k=e.target.dataset.input;if(k&&draft){draft[k]=e.target.value;if(k==='customA'||k==='category'||k==='accountId'){if(k==='category'){const r=S.settings.categoryRules.find(c=>c.category===draft.category);if(r)draft.split=r.splitRule.type}render()}}});
+document.addEventListener('change',e=>{const k=e.target.dataset.change;if(!k)return;
+ if(k==='rate'){S.settings.savingsRateTarget=+e.target.value;save();render();return}
+ if(k==='csvfile'){const f=e.target.files[0];if(!f)return;const rd=new FileReader();rd.onload=()=>{const accId=val('csv-a'),a=acc(accId);let n=0;
+  rd.result.split(/\r?\n/).slice(1).forEach(line=>{const c=line.split(',').map(x=>x.trim().replace(/^"|"$/g,''));if(c.length<2)return;const amt=Math.abs(toNum(c[1]));if(!amt||!/^\d{4}-\d{2}-\d{2}/.test(c[0]))return;
+   const category=EXP_CATS.includes(c[3])?c[3]:'other';addTx({id:'t_csv_'+Date.now()+'_'+n,date:c[0].slice(0,10),amount:amt,accountId:accId,owner:a.owner,paidBy:a.owner,scope:a.owner==='joint'?'ours':'mine',category,merchant:c[2]||'—',merchantEn:c[2]||'—',method:'bank',splitRule:a.owner==='joint'?S.settings.defaultSplit:undefined,tags:[],kind:'expense'});n++});
+  commit(L(`استُوردت ${num(n,0)} حركة`,`Imported ${n} transactions`))};rd.readAsText(f);return}
+ UI[k]=e.target.value;render()});
+// split-rule segments on the Me page
+document.addEventListener('click',e=>{const el=e.target.closest('[data-act^="set:split:"]');if(!el)return;const[,,key,type]=el.dataset.act.split(':');
+ const rule=type==='custom'?{type,customA:key==='family'?40:60}:{type};
+ if(key==='default')S.settings.defaultSplit=rule;else{const r=S.settings.categoryRules.find(c=>c.category===key);if(r)r.splitRule=rule;else S.settings.categoryRules.push({category:key,splitRule:rule})}save();render()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&UI.sheet){UI.sheet=null;render()}});
+window.addEventListener('hashchange',()=>{UI.route=location.hash.slice(1)||'home';render()});
+render();
+</script></body></html>
