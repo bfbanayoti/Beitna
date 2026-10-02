@@ -4,7 +4,8 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="بيتنا">
 <meta name="theme-color" content="#f6efe6" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#1b1714" media="(prefers-color-scheme: dark)">
 <meta name="robots" content="noindex,nofollow">
-<title>Beitna</title>
+<title>بيتنا</title>
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><link rel="icon" href="icons/logo.svg" type="image/svg+xml"><link rel="manifest" href="manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Inter:wght@400..800&display=swap">
 <style>
@@ -39,7 +40,15 @@ body::before{content:"";position:fixed;inset:-10%;background:var(--mesh);z-index
 @keyframes in{from{opacity:0;transform:translateY(16px) scale(.97)}}
 .mark{width:84px;height:84px;border-radius:24px;display:grid;place-items:center;color:#fff;
   background:linear-gradient(155deg,oklch(68% .15 46),var(--clay-2));box-shadow:inset 0 1.5px 0 rgb(255 255 255/.45),inset 0 -1px 0 rgb(0 0 0/.1),0 18px 40px oklch(50% .14 38/.38)}
-.mark svg{width:42px;height:42px}
+.mark{background:none;box-shadow:0 18px 40px oklch(45% .13 35/.35);overflow:hidden}.mark svg{width:84px;height:84px;display:block}
+.langsw{position:fixed;top:calc(env(safe-area-inset-top,0px) + 12px);right:16px;display:flex;gap:2px;padding:3px;border-radius:999px;background:var(--glass);-webkit-backdrop-filter:blur(20px) saturate(180%);backdrop-filter:blur(20px) saturate(180%);box-shadow:inset 0 1px 0 var(--rim),0 4px 14px oklch(30% .04 50/.1);z-index:5}
+.langsw button{border:0;background:none;font:inherit;font-size:13.5px;font-weight:500;color:var(--ink-2);padding:6px 13px;border-radius:999px;cursor:pointer}
+.langsw button.on{background:rgb(255 255 255/.75);color:var(--ink);font-weight:650;box-shadow:0 2px 8px oklch(30% .04 50/.12)}
+button.go.alt{background:var(--glass);color:var(--ink);box-shadow:inset 0 1px 0 var(--rim),0 2px 8px oklch(30% .04 50/.08);display:flex;align-items:center;justify-content:center;gap:8px}
+button.go.alt svg{width:22px;height:22px}
+.offer{width:100%;display:flex;flex-direction:column;gap:10px;padding:18px;border-radius:26px;background:var(--glass);-webkit-backdrop-filter:blur(30px);backdrop-filter:blur(30px);box-shadow:inset 0 1px 0 var(--rim),0 20px 50px oklch(30% .04 50/.14)}
+.offer b{font-size:17px}.offer span{color:var(--ink-2);font-size:14px}
+.link{border:0;background:none;font:inherit;color:var(--ink-2);font-size:15px;padding:8px;cursor:pointer}
 h1{margin:0;font-size:34px;font-weight:800;line-height:1.1}
 .sub{margin:6px 0 0;color:var(--ink-2);font-size:15px}
 form{width:100%;display:flex;flex-direction:column;gap:12px;padding:16px;border-radius:30px;background:var(--glass);
@@ -67,37 +76,54 @@ button.go[disabled]{opacity:.7}
 @keyframes sp{to{transform:rotate(1turn)}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style></head><body>
+<div class="langsw" dir="ltr" role="group" aria-label="Language"><button data-l="ar">العربية</button><button data-l="en">English</button></div>
 <main class="lock" id="lock" hidden>
-  <div class="mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 10.2 12 3.5l8.5 6.7V19a1.5 1.5 0 0 1-1.5 1.5h-4v-5.5h-6v5.5H5A1.5 1.5 0 0 1 3.5 19z"/></svg></div>
+  <div class="mark" aria-hidden="true"><svg viewBox="0 0 64 64"><defs><linearGradient id="lb" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#c8664a"/><stop offset="1" stop-color="#7e2f22"/></linearGradient><linearGradient id="ld" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f3d9a4"/><stop offset="1" stop-color="#c99a52"/></linearGradient></defs><rect width="64" height="64" rx="15" fill="url(#lb)"/><path d="M21 49V31a11 11 0 0 1 22 0v18" fill="none" stroke="#fbf3ea" stroke-width="4.6" stroke-linecap="round"/><circle cx="32" cy="41" r="3.4" fill="url(#ld)"/></svg></div>
   <div><h1 id="t">بيتنا</h1><p class="sub" id="s"></p></div>
   <form id="f" autocomplete="on">
     <input type="text" name="username" value="beitna" autocomplete="username" hidden>
     <div class="field"><input id="pw" type="password" autocomplete="current-password" required aria-label="Password">
       <button type="button" class="eye" id="eye" aria-label="Show password"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
     <button class="go" id="go" type="submit"></button>
+    <button class="go alt" id="fid" type="button" hidden></button>
     <label class="remember"><input type="checkbox" id="rem" checked><span id="r"></span></label>
   </form>
   <p class="err" id="err" role="alert"></p>
+  <div class="offer" id="offer" hidden><b id="of-t"></b><span id="of-d"></span><button class="go" id="of-y" type="button"></button><button class="link" id="of-n" type="button"></button></div>
   <div class="foot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg><span id="ft"></span></div>
 </main>
 <script>
 (()=>{ // own scope: the app is written into this same window and declares AR, L, AUTH… itself
 const PAYLOAD=/*PAYLOAD*/null;
-const AUTH='beitna:auth';
+const AUTH='beitna:auth',FID='beitna:faceid';
 const enc=new TextEncoder(),dec=new TextDecoder();
 const unb64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
 const b64=b=>btoa(String.fromCharCode(...new Uint8Array(b)));
-let lang='ar';try{lang=JSON.parse(localStorage.getItem('beitna:v1')).settings.lang||'ar'}catch(e){}
-if(!/^ar/.test(navigator.language)&&!localStorage.getItem('beitna:v1'))lang='en';
-const AR=lang==='ar',L=(a,e)=>AR?a:e;
-document.documentElement.lang=lang;document.documentElement.dir=AR?'rtl':'ltr';
 const $=id=>document.getElementById(id);
+let lang=null;try{lang=localStorage.getItem('beitna:lang')||JSON.parse(localStorage.getItem('beitna:v1')).settings.lang}catch(e){}
+if(!lang)lang=/^ar/.test(navigator.language)?'ar':'en';
+const L=(a,e)=>lang==='ar'?a:e;
+if('serviceWorker' in navigator&&location.protocol==='https:')navigator.serviceWorker.register('sw.js').catch(()=>{});
 
-async function openApp(raw,role,remember){
+// ---- language switch: stays in the same place in both languages; also becomes the app's language ----
+function setLang(l){lang=l;try{localStorage.setItem('beitna:lang',l);const d=JSON.parse(localStorage.getItem('beitna:v1'));if(d&&d.settings){d.settings.lang=l;d.settings.numerals=l==='ar'?'arabic':'latin';localStorage.setItem('beitna:v1',JSON.stringify(d))}}catch(e){}texts()}
+document.querySelectorAll('.langsw button').forEach(b=>b.onclick=()=>setLang(b.dataset.l));
+const FACE='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 8V6A2.5 2.5 0 0 1 6 3.5h2M16 3.5h2A2.5 2.5 0 0 1 20.5 6v2M20.5 16v2a2.5 2.5 0 0 1-2.5 2.5h-2M8 20.5H6A2.5 2.5 0 0 1 3.5 18v-2M8.5 9v1.5M15.5 9v1.5M12 9v4h-1M9 16a4.5 4.5 0 0 0 6 0"/></svg>';
+function texts(){document.documentElement.lang=lang;document.documentElement.dir=lang==='ar'?'rtl':'ltr';
+  document.querySelectorAll('.langsw button').forEach(b=>b.classList.toggle('on',b.dataset.l===lang));
+  $('t').textContent=L('بيتنا','Beitna');document.title=L('بيتنا','Beitna');
+  $('s').textContent=L('أدخل كلمة المرور للمتابعة','Enter the password to continue');
+  if(!$('go').disabled)$('go').textContent=L('افتح','Unlock');$('r').textContent=L('تذكّر هذا الجهاز','Remember this device');
+  $('fid').innerHTML=FACE+L('افتح بـ Face ID','Unlock with Face ID');
+  $('ft').textContent=L('مشفّر بالكامل على جهازك','End-to-end encrypted on your device');$('pw').placeholder=L('كلمة المرور','Password');
+  $('of-t').textContent=L('استخدم Face ID في المرة القادمة؟','Use Face ID next time?');$('of-d').textContent=L('افتح بيتنا بنظرة، دون كتابة كلمة المرور.','Open Beitna with a glance instead of typing the password.');
+  $('of-y').textContent=L('فعّل Face ID','Turn on Face ID');$('of-n').textContent=L('ليس الآن','Not now')}
+
+async function openApp(raw,role,keep){
   const key=await crypto.subtle.importKey('raw',raw,'AES-GCM',false,['decrypt']);
   const html=dec.decode(await crypto.subtle.decrypt({name:'AES-GCM',iv:unb64(PAYLOAD.iv)},key,unb64(PAYLOAD.ct)));
   const rec=JSON.stringify({kid:PAYLOAD.kid,k:b64(raw),role});
-  try{(remember&&role==='admin'?localStorage:sessionStorage).setItem(AUTH,rec)}catch(e){}  // guests: this session only
+  try{(keep&&role==='admin'?localStorage:sessionStorage).setItem(AUTH,rec)}catch(e){}  // guests: this session only
   document.open();document.write(html);document.close();
 }
 async function unwrap(pw){
@@ -106,20 +132,43 @@ async function unwrap(pw){
     const kek=await crypto.subtle.deriveKey({name:'PBKDF2',salt:unb64(s.salt),iterations:PAYLOAD.iter,hash:'SHA-256'},base,{name:'AES-GCM',length:256},false,['decrypt']);
     return {raw:await crypto.subtle.decrypt({name:'AES-GCM',iv:unb64(s.iv)},kek,unb64(s.key)),role:s.role}}));
 }
-function showLock(){
-  $('s').textContent=L('أدخل كلمة المرور للمتابعة','Enter the password to continue');
-  $('go').textContent=L('افتح','Unlock');$('r').textContent=L('تذكّر هذا الجهاز','Remember this device');
-  $('ft').textContent=L('مشفّر بالكامل على جهازك','End-to-end encrypted on your device');
-  $('pw').placeholder=L('كلمة المرور','Password');$('lock').hidden=false;setTimeout(()=>$('pw').focus(),350);
+
+// ---- Face ID (WebAuthn passkey + PRF): the passkey's PRF secret encrypts the app key, so nothing usable is stored in plain form ----
+const PRF_SALT=enc.encode('beitna-faceid-prf-v1'.padEnd(32,'.'));
+async function canFaceID(){try{if(!window.PublicKeyCredential||!await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable())return false;
+  if(PublicKeyCredential.getClientCapabilities){const c=await PublicKeyCredential.getClientCapabilities();if(c&&('extension:prf' in c))return !!c['extension:prf']}return true}catch(e){return false}}
+async function prfKey(out){return crypto.subtle.importKey('raw',out,'AES-GCM',false,['encrypt','decrypt'])}
+async function enableFaceID(raw,role){
+  const cred=await navigator.credentials.create({publicKey:{rp:{name:'Beitna'},user:{id:crypto.getRandomValues(new Uint8Array(16)),name:'beitna-'+role,displayName:'Beitna'},
+    challenge:crypto.getRandomValues(new Uint8Array(32)),pubKeyCredParams:[{type:'public-key',alg:-7},{type:'public-key',alg:-257}],
+    authenticatorSelection:{authenticatorAttachment:'platform',residentKey:'preferred',userVerification:'required'},timeout:60000,extensions:{prf:{eval:{first:PRF_SALT}}}}});
+  const ext=cred.getClientExtensionResults().prf||{};if(!ext.enabled&&!ext.results)throw new Error('prf');
+  let out=ext.results&&ext.results.first;
+  if(!out){const a=await navigator.credentials.get({publicKey:{challenge:crypto.getRandomValues(new Uint8Array(32)),allowCredentials:[{type:'public-key',id:cred.rawId}],userVerification:'required',extensions:{prf:{eval:{first:PRF_SALT}}}}});
+    out=(a.getClientExtensionResults().prf||{}).results?.first;if(!out)throw new Error('prf')}
+  const iv=crypto.getRandomValues(new Uint8Array(12)),ct=await crypto.subtle.encrypt({name:'AES-GCM',iv},await prfKey(out),raw);
+  localStorage.setItem(FID,JSON.stringify({id:b64(cred.rawId),kid:PAYLOAD.kid,iv:b64(iv),ct:b64(ct),role}));
 }
+async function faceUnlock(){const f=JSON.parse(localStorage.getItem(FID));
+  const a=await navigator.credentials.get({publicKey:{challenge:crypto.getRandomValues(new Uint8Array(32)),allowCredentials:[{type:'public-key',id:unb64(f.id)}],userVerification:'required',extensions:{prf:{eval:{first:PRF_SALT}}}}});
+  const out=(a.getClientExtensionResults().prf||{}).results?.first;if(!out)throw new Error('prf');
+  const raw=await crypto.subtle.decrypt({name:'AES-GCM',iv:unb64(f.iv)},await prfKey(out),unb64(f.ct));return openApp(raw,f.role,false)}
+
+function showLock(){texts();$('lock').hidden=false;
+  let f=null;try{f=JSON.parse(localStorage.getItem(FID))}catch(e){}
+  if(f&&f.kid===PAYLOAD.kid){$('fid').hidden=false;$('fid').onclick=async()=>{$('err').textContent='';try{await faceUnlock()}catch(e){$('err').textContent=L('لم يكتمل Face ID. استخدم كلمة المرور.','Face ID didn\'t complete. Use the password.')}}}
+  else{try{localStorage.removeItem(FID)}catch(e){}setTimeout(()=>$('pw').focus(),350)}}
 $('eye').onclick=()=>{const p=$('pw');p.type=p.type==='password'?'text':'password'};
+const resetGo=()=>{$('go').disabled=false;$('go').textContent=L('افتح','Unlock')};
 $('f').onsubmit=async e=>{e.preventDefault();const pw=$('pw').value;if(!pw)return;
   $('go').disabled=true;$('go').innerHTML='<span class="spin"></span>';$('err').textContent='';
   let hit;try{hit=await unwrap(pw)}catch(_){try{if(pw.trim()!==pw)hit=await unwrap(pw.trim())}catch(_){}}
-  if(hit){try{return await openApp(hit.raw,hit.role,$('rem').checked)}catch(e){$('go').disabled=false;$('go').textContent=L('افتح','Unlock');$('err').textContent=L('تعذّر فتح التطبيق: ','Could not open the app: ')+e.message;return}}
-  $('go').disabled=false;$('go').textContent=L('افتح','Unlock');$('err').textContent=L('كلمة المرور غير صحيحة','Incorrect password');
-  const f=$('f');f.classList.remove('shake');void f.offsetWidth;f.classList.add('shake');$('pw').select();
-};
+  if(!hit){resetGo();$('err').textContent=L('كلمة المرور غير صحيحة','Incorrect password');const f=$('f');f.classList.remove('shake');void f.offsetWidth;f.classList.add('shake');$('pw').select();return}
+  const keep=$('rem').checked,open=k=>openApp(hit.raw,hit.role,k).catch(e=>{resetGo();$('err').textContent=L('تعذّر فتح التطبيق: ','Could not open the app: ')+e.message});
+  // admins who want to stay signed in are offered Face ID instead of keeping the key on the device
+  if(keep&&hit.role==='admin'&&await canFaceID()){$('f').hidden=true;$('offer').hidden=false;
+    $('of-y').onclick=async()=>{try{await enableFaceID(hit.raw,hit.role);open(false)}catch(e){open(true)}};$('of-n').onclick=()=>open(true);return}
+  open(keep)};
 (async()=>{
   if(!PAYLOAD||!crypto.subtle){showLock();$('err').textContent=L('هذه الصفحة غير مبنية أو تحتاج اتصالاً آمناً (https).','This page is not built, or needs a secure (https) connection.');$('go').disabled=true;return}
   for(const st of[localStorage,sessionStorage]){let a;try{a=JSON.parse(st.getItem(AUTH))}catch(e){}
