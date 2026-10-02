@@ -97,7 +97,7 @@ async function openApp(raw,role,remember){
   const key=await crypto.subtle.importKey('raw',raw,'AES-GCM',false,['decrypt']);
   const html=dec.decode(await crypto.subtle.decrypt({name:'AES-GCM',iv:unb64(PAYLOAD.iv)},key,unb64(PAYLOAD.ct)));
   const rec=JSON.stringify({kid:PAYLOAD.kid,k:b64(raw),role});
-  try{(remember?localStorage:sessionStorage).setItem(AUTH,rec)}catch(e){}
+  try{(remember&&role==='admin'?localStorage:sessionStorage).setItem(AUTH,rec)}catch(e){}  // guests: this session only
   document.open();document.write(html);document.close();
 }
 async function unwrap(pw){
