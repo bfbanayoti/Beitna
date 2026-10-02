@@ -37,7 +37,8 @@ self.addEventListener('install',e=>{e.waitUntil(caches.open(V).then(c=>c.addAll(
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==V).map(k=>caches.delete(k)))).then(()=>self.clients.claim()))});
 self.addEventListener('fetch',e=>{const r=e.request;if(r.method!=='GET')return;const u=new URL(r.url);
  if(r.mode==='navigate'||(u.origin===location.origin&&/\\/(index\\.html)?$/.test(u.pathname))){
-  e.respondWith(fetch(r).then(res=>{const c=res.clone();caches.open(V).then(x=>x.put('./index.html',c));return res}).catch(()=>caches.match('./index.html')));return}
+  // revalidate past GitHub Pages' 10-minute browser cache so a new build shows on the next open
+  e.respondWith(fetch(r.url,{cache:'no-cache',credentials:'same-origin'}).then(res=>{const c=res.clone();caches.open(V).then(x=>x.put('./index.html',c));return res}).catch(()=>caches.match('./index.html')));return}
  if(u.origin===location.origin||/fonts\\.(googleapis|gstatic)\\.com|cdn\\.jsdelivr\\.net/.test(u.host)){
   e.respondWith(caches.match(r).then(hit=>hit||fetch(r).then(res=>{if(res.ok||res.type==='opaque'){const c=res.clone();caches.open(V).then(x=>x.put(r,c))}return res})))}});
 """
