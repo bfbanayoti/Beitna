@@ -102,14 +102,24 @@ const PAYLOAD=/*PAYLOAD*/null;
 // Opens analytics (separate Beitna Analytics site). Logs 'view' when the lock screen shows and 'unlock' with the role.
 // The server turns the network address into an approximate city and doesn't store the address itself.
 const ANALYTICS=/*ANALYTICS*/null;
-function track(event,role,method){if(!ANALYTICS)return;try{const ua=navigator.userAgent,m=ua.match(/OS (\d+)[_.](\d+)/),
-  ipad=/iPad/.test(ua)||(/Macintosh/.test(ua)&&navigator.maxTouchPoints>1),
-  device=/iPhone/.test(ua)?'iPhone':ipad?'iPad':/Android/.test(ua)?'Android':/Macintosh/.test(ua)?'Mac':/Windows/.test(ua)?'Windows':'Other',
-  os=(device==='iPhone'||device==='iPad')&&m?'iOS '+m[1]+'.'+m[2]:/Android (\d+)/.test(ua)?'Android '+RegExp.$1:device==='Mac'?'macOS':device==='Windows'?'Windows':'',
-  browser=/EdgiOS|Edg\//.test(ua)?'Edge':/CriOS|Chrome/.test(ua)?'Chrome':/FxiOS|Firefox/.test(ua)?'Firefox':/Safari/.test(ua)?'Safari':'Other';
- fetch(ANALYTICS.url+'/rest/v1/rpc/log_open',{method:'POST',keepalive:true,headers:{apikey:ANALYTICS.key,'Content-Type':'application/json'},
-  body:JSON.stringify({p_event:event,p_role:role||null,p_method:method||null,p_device:device,p_os:os,p_browser:browser,
-   p_standalone:navigator.standalone===true||matchMedia('(display-mode: standalone)').matches,p_lang:lang})}).catch(()=>{})}catch(e){}}
+// what device this is. iOS 26+ Safari freezes the reported iOS version at 18.6, so Safari's own version
+// (which matches the iOS version from 26 on) is used when present.
+function dev(){const ua=navigator.userAgent,ipad=/iPad/.test(ua)||(/Macintosh/.test(ua)&&navigator.maxTouchPoints>1),ios=/iPhone|iPod/.test(ua)||ipad;
+  const device=/iPhone/.test(ua)?'iPhone':ipad?'iPad':/Android/.test(ua)?'Android':/Macintosh/.test(ua)?'Mac':/Windows/.test(ua)?'Windows':'Other';
+  let os='';if(ios){const v=ua.match(/Version\/(\d+)(?:\.(\d+))?/),m=ua.match(/OS (\d+)[_.](\d+)/);
+    os=v&&+v[1]>=26?'iOS '+v[1]+(v[2]&&v[2]!=='0'?'.'+v[2]:''):m?(m[1]==='18'&&m[2]==='6'?'iOS 18.6 or later':'iOS '+m[1]+'.'+m[2]):'iOS'}
+  else if(/Android (\d+)/.test(ua))os='Android '+RegExp.$1;else if(device==='Mac')os='macOS';else if(device==='Windows')os='Windows';
+  const browser=/EdgiOS|Edg\//.test(ua)?'Edge':/CriOS|Chrome/.test(ua)?'Chrome':/FxiOS|Firefox/.test(ua)?'Firefox':/Safari|AppleWebKit/.test(ua)?'Safari':'Other';
+  let id=null;try{id=localStorage.getItem('beitna:did');if(!id){id=crypto.randomUUID();localStorage.setItem('beitna:did',id)}}catch(e){}
+  return{device,os,browser,id,standalone:navigator.standalone===true||matchMedia('(display-mode: standalone)').matches}}
+const rpc=(fn,body)=>fetch(ANALYTICS.url+'/rest/v1/rpc/'+fn,{method:'POST',keepalive:true,headers:{apikey:ANALYTICS.key,'Content-Type':'application/json'},body:JSON.stringify(body)}).catch(()=>{});
+function track(event,role,method){if(!ANALYTICS)return;try{const d=dev();
+ rpc('log_open',{p_event:event,p_role:role||null,p_method:method||null,p_device:d.device,p_os:d.os,p_browser:d.browser,p_standalone:d.standalone,p_lang:lang});
+ if(event!=='unlock')return;
+ // the app logs screens and buttons against this session (sessionStorage only lives for this visit)
+ const sid=crypto.randomUUID();let fid=false,rem=false;try{fid=!!localStorage.getItem(FID);rem=!!localStorage.getItem(AUTH)}catch(e){}
+ rpc('start_session',{p_id:sid,p_role:role||null,p_method:method||null,p_device:d.device,p_os:d.os,p_browser:d.browser,p_standalone:d.standalone,p_lang:lang,p_device_id:d.id,p_remembered:rem||method==='remembered',p_faceid:fid});
+ try{sessionStorage.setItem('beitna:an',JSON.stringify({url:ANALYTICS.url,key:ANALYTICS.key,sid}))}catch(e){}}catch(e){}}
 const AUTH='beitna:auth',FID='beitna:faceid';
 const enc=new TextEncoder(),dec=new TextDecoder();
 const unb64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
@@ -131,7 +141,7 @@ function texts(){document.documentElement.lang=lang;document.documentElement.dir
   if(!$('go').disabled)$('go').textContent=L('افتح','Unlock');$('r').textContent=L('تذكّر هذا الجهاز','Remember this device');
   $('fid').innerHTML=FACE+L('افتح بـ Face ID','Unlock with Face ID');
   $('ft').textContent=L('مشفّر بالكامل على جهازك','End-to-end encrypted on your device');
-  if(ANALYTICS)$('pn').textContent=L('للأمان، نسجّل مرات الفتح مع المدينة التقريبية ونوع الجهاز، دون حفظ عنوان IP.','For security, opens are logged with an approximate city and device type. IP addresses are not stored.');$('pw').placeholder=L('كلمة المرور','Password');
+  if(ANALYTICS)$('pn').textContent=L('للأمان، نسجّل مرات الفتح والمدينة التقريبية ونوع الجهاز والشاشات والأزرار المستخدمة. لا نسجّل المبالغ ولا ما تكتبه، ولا نحفظ عنوان IP.','For security, opens, approximate city, device type and the screens and buttons used are recorded. Amounts and anything you type are not, and IP addresses are not stored.');$('pw').placeholder=L('كلمة المرور','Password');
   $('of-t').textContent=L('استخدم Face ID في المرة القادمة؟','Use Face ID next time?');$('of-d').textContent=L('افتح بيتنا بنظرة، دون كتابة كلمة المرور.','Open Beitna with a glance instead of typing the password.');
   $('of-y').textContent=L('فعّل Face ID','Turn on Face ID');$('of-n').textContent=L('ليس الآن','Not now')}
 
