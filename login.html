@@ -112,9 +112,10 @@ function dev(){const ua=navigator.userAgent,ipad=/iPad/.test(ua)||(/Macintosh/.t
   const browser=/EdgiOS|Edg\//.test(ua)?'Edge':/CriOS|Chrome/.test(ua)?'Chrome':/FxiOS|Firefox/.test(ua)?'Firefox':/Safari|AppleWebKit/.test(ua)?'Safari':'Other';
   let id=null;try{id=localStorage.getItem('beitna:did');if(!id){id=crypto.randomUUID();localStorage.setItem('beitna:did',id)}}catch(e){}
   return{device,os,browser,id,standalone:navigator.standalone===true||matchMedia('(display-mode: standalone)').matches}}
-const rpc=(fn,body)=>fetch(ANALYTICS.url+'/rest/v1/rpc/'+fn,{method:'POST',keepalive:true,headers:{apikey:ANALYTICS.key,'Content-Type':'application/json'},body:JSON.stringify(body)}).catch(()=>{});
+const post=(fn,body)=>fetch(ANALYTICS.url+'/rest/v1/rpc/'+fn,{method:'POST',keepalive:true,headers:{apikey:ANALYTICS.key,'Content-Type':'application/json'},body:JSON.stringify(body)});
+const rpc=(fn,body)=>post(fn,body).then(r=>{if(!r.ok&&fn==='log_open'&&'p_device_id' in body&&body.p_event!=='fail'){const{p_device_id,...old}=body;return post(fn,old)}}).catch(()=>{});
 function track(event,role,method){if(!ANALYTICS)return;try{const d=dev();
- rpc('log_open',{p_event:event,p_role:role||null,p_method:method||null,p_device:d.device,p_os:d.os,p_browser:d.browser,p_standalone:d.standalone,p_lang:lang});
+ rpc('log_open',{p_event:event,p_role:role||null,p_method:method||null,p_device:d.device,p_os:d.os,p_browser:d.browser,p_standalone:d.standalone,p_lang:lang,p_device_id:d.id});
  if(event!=='unlock')return;
  // the app logs screens and buttons against this session (sessionStorage only lives for this visit)
  const sid=crypto.randomUUID();let fid=false,rem=false;try{fid=!!localStorage.getItem(FID);rem=!!localStorage.getItem(AUTH)}catch(e){}
@@ -195,7 +196,7 @@ const resetGo=()=>{$('go').disabled=false;$('go').textContent=L('افتح','Unlo
 $('f').onsubmit=async e=>{e.preventDefault();const pw=$('pw').value;if(!pw)return;
   $('go').disabled=true;$('go').innerHTML='<span class="spin"></span>';$('err').textContent='';$('err').classList.remove('hint');
   let hit;try{hit=await unwrap(pw)}catch(_){try{if(pw.trim()!==pw)hit=await unwrap(pw.trim())}catch(_){}}
-  if(!hit){resetGo();$('err').textContent=L('كلمة المرور غير صحيحة','Incorrect password');const f=$('f');f.classList.remove('shake');void f.offsetWidth;f.classList.add('shake');$('pw').select();return}
+  if(!hit){track('fail');resetGo();$('err').textContent=L('كلمة المرور غير صحيحة','Incorrect password');const f=$('f');f.classList.remove('shake');void f.offsetWidth;f.classList.add('shake');$('pw').select();return}
   const keep=$('rem').checked,open=k=>openApp(hit.raw,hit.role,k,'password').catch(e=>{resetGo();$('err').textContent=L('تعذّر فتح التطبيق: ','Could not open the app: ')+e.message});
   // admins who want to stay signed in are offered Face ID instead of keeping the key on the device
   if(wantFace&&hit.role!=='admin'){$('err').classList.remove('hint');$('err').textContent=L('Face ID متاح لكلمة مرور المدير فقط.','Face ID is only available with the admin password.')}
