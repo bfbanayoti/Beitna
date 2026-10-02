@@ -72,6 +72,7 @@ button.go[disabled]{opacity:.7}
 .err.hint{color:var(--ink-2);font-weight:500}
 .shake{animation:shake .45s cubic-bezier(.36,.07,.19,.97)}
 @keyframes shake{20%,60%{transform:translateX(-9px)}40%,80%{transform:translateX(9px)}}
+.pn{margin:-10px 0 0;max-width:300px;font-size:11.5px;line-height:1.45;color:var(--ink-2);opacity:.85}.pn:empty{display:none}
 .foot{font-size:12px;color:var(--ink-2);display:flex;align-items:center;gap:6px}
 .foot svg{width:13px;height:13px}
 .spin{width:20px;height:20px;border-radius:50%;border:2.5px solid rgb(255 255 255/.4);border-top-color:#fff;animation:sp .8s linear infinite;display:inline-block;vertical-align:-4px}
@@ -92,11 +93,23 @@ button.go[disabled]{opacity:.7}
   </form>
   <p class="err" id="err" role="alert"></p>
   <div class="offer" id="offer" hidden><b id="of-t"></b><span id="of-d"></span><button class="go" id="of-y" type="button"></button><button class="link" id="of-n" type="button"></button></div>
+  <p class="pn" id="pn"></p>
   <div class="foot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg><span id="ft"></span></div>
 </main>
 <script>
 (()=>{ // own scope: the app is written into this same window and declares AR, L, AUTH… itself
 const PAYLOAD=/*PAYLOAD*/null;
+// Opens analytics (separate Beitna Analytics site). Logs 'view' when the lock screen shows and 'unlock' with the role.
+// The server turns the network address into an approximate city and doesn't store the address itself.
+const ANALYTICS=/*ANALYTICS*/null;
+function track(event,role,method){if(!ANALYTICS)return;try{const ua=navigator.userAgent,m=ua.match(/OS (\d+)[_.](\d+)/),
+  ipad=/iPad/.test(ua)||(/Macintosh/.test(ua)&&navigator.maxTouchPoints>1),
+  device=/iPhone/.test(ua)?'iPhone':ipad?'iPad':/Android/.test(ua)?'Android':/Macintosh/.test(ua)?'Mac':/Windows/.test(ua)?'Windows':'Other',
+  os=(device==='iPhone'||device==='iPad')&&m?'iOS '+m[1]+'.'+m[2]:/Android (\d+)/.test(ua)?'Android '+RegExp.$1:device==='Mac'?'macOS':device==='Windows'?'Windows':'',
+  browser=/EdgiOS|Edg\//.test(ua)?'Edge':/CriOS|Chrome/.test(ua)?'Chrome':/FxiOS|Firefox/.test(ua)?'Firefox':/Safari/.test(ua)?'Safari':'Other';
+ fetch(ANALYTICS.url+'/rest/v1/rpc/log_open',{method:'POST',keepalive:true,headers:{apikey:ANALYTICS.key,Authorization:'Bearer '+ANALYTICS.key,'Content-Type':'application/json'},
+  body:JSON.stringify({p_event:event,p_role:role||null,p_method:method||null,p_device:device,p_os:os,p_browser:browser,
+   p_standalone:navigator.standalone===true||matchMedia('(display-mode: standalone)').matches,p_lang:lang})}).catch(()=>{})}catch(e){}}
 const AUTH='beitna:auth',FID='beitna:faceid';
 const enc=new TextEncoder(),dec=new TextDecoder();
 const unb64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
@@ -117,15 +130,17 @@ function texts(){document.documentElement.lang=lang;document.documentElement.dir
   $('s').textContent=L('أدخل كلمة المرور للمتابعة','Enter the password to continue');
   if(!$('go').disabled)$('go').textContent=L('افتح','Unlock');$('r').textContent=L('تذكّر هذا الجهاز','Remember this device');
   $('fid').innerHTML=FACE+L('افتح بـ Face ID','Unlock with Face ID');
-  $('ft').textContent=L('مشفّر بالكامل على جهازك','End-to-end encrypted on your device');$('pw').placeholder=L('كلمة المرور','Password');
+  $('ft').textContent=L('مشفّر بالكامل على جهازك','End-to-end encrypted on your device');
+  if(ANALYTICS)$('pn').textContent=L('للأمان، نسجّل مرات الفتح مع المدينة التقريبية ونوع الجهاز، دون حفظ عنوان IP.','For security, opens are logged with an approximate city and device type. IP addresses are not stored.');$('pw').placeholder=L('كلمة المرور','Password');
   $('of-t').textContent=L('استخدم Face ID في المرة القادمة؟','Use Face ID next time?');$('of-d').textContent=L('افتح بيتنا بنظرة، دون كتابة كلمة المرور.','Open Beitna with a glance instead of typing the password.');
   $('of-y').textContent=L('فعّل Face ID','Turn on Face ID');$('of-n').textContent=L('ليس الآن','Not now')}
 
-async function openApp(raw,role,keep){
+async function openApp(raw,role,keep,method){
   const key=await crypto.subtle.importKey('raw',raw,'AES-GCM',false,['decrypt']);
   const html=dec.decode(await crypto.subtle.decrypt({name:'AES-GCM',iv:unb64(PAYLOAD.iv)},key,unb64(PAYLOAD.ct)));
   const rec=JSON.stringify({kid:PAYLOAD.kid,k:b64(raw),role});
   try{(keep&&role==='admin'?localStorage:sessionStorage).setItem(AUTH,rec)}catch(e){}  // guests: this session only
+  track('unlock',role,method);
   document.open();document.write(html);document.close();
 }
 async function unwrap(pw){
@@ -154,9 +169,9 @@ async function enableFaceID(raw,role){
 async function faceUnlock(){const f=JSON.parse(localStorage.getItem(FID));
   const a=await navigator.credentials.get({publicKey:{challenge:crypto.getRandomValues(new Uint8Array(32)),allowCredentials:[{type:'public-key',id:unb64(f.id)}],userVerification:'required',extensions:{prf:{eval:{first:PRF_SALT}}}}});
   const out=(a.getClientExtensionResults().prf||{}).results?.first;if(!out)throw new Error('prf');
-  const raw=await crypto.subtle.decrypt({name:'AES-GCM',iv:unb64(f.iv)},await prfKey(out),unb64(f.ct));return openApp(raw,f.role,false)}
+  const raw=await crypto.subtle.decrypt({name:'AES-GCM',iv:unb64(f.iv)},await prfKey(out),unb64(f.ct));return openApp(raw,f.role,false,'faceid')}
 
-function showLock(){texts();$('lock').hidden=false;
+function showLock(){texts();$('lock').hidden=false;track('view');
   let f=null;try{f=JSON.parse(localStorage.getItem(FID))}catch(e){}
   if(f&&f.kid===PAYLOAD.kid){$('fid').hidden=false;$('fid').onclick=async()=>{$('err').textContent='';try{await faceUnlock()}catch(e){$('err').textContent=L('لم يكتمل Face ID. استخدم كلمة المرور.','Face ID didn\'t complete. Use the password.')}}}
   else{try{localStorage.removeItem(FID)}catch(e){}
@@ -171,7 +186,7 @@ $('f').onsubmit=async e=>{e.preventDefault();const pw=$('pw').value;if(!pw)retur
   $('go').disabled=true;$('go').innerHTML='<span class="spin"></span>';$('err').textContent='';$('err').classList.remove('hint');
   let hit;try{hit=await unwrap(pw)}catch(_){try{if(pw.trim()!==pw)hit=await unwrap(pw.trim())}catch(_){}}
   if(!hit){resetGo();$('err').textContent=L('كلمة المرور غير صحيحة','Incorrect password');const f=$('f');f.classList.remove('shake');void f.offsetWidth;f.classList.add('shake');$('pw').select();return}
-  const keep=$('rem').checked,open=k=>openApp(hit.raw,hit.role,k).catch(e=>{resetGo();$('err').textContent=L('تعذّر فتح التطبيق: ','Could not open the app: ')+e.message});
+  const keep=$('rem').checked,open=k=>openApp(hit.raw,hit.role,k,'password').catch(e=>{resetGo();$('err').textContent=L('تعذّر فتح التطبيق: ','Could not open the app: ')+e.message});
   // admins who want to stay signed in are offered Face ID instead of keeping the key on the device
   if(wantFace&&hit.role!=='admin'){$('err').classList.remove('hint');$('err').textContent=L('Face ID متاح لكلمة مرور المدير فقط.','Face ID is only available with the admin password.')}
   if((keep||wantFace)&&hit.role==='admin'&&await canFaceID()){$('f').hidden=true;$('offer').hidden=false;
@@ -180,7 +195,7 @@ $('f').onsubmit=async e=>{e.preventDefault();const pw=$('pw').value;if(!pw)retur
 (async()=>{
   if(!PAYLOAD||!crypto.subtle){showLock();$('err').textContent=L('هذه الصفحة غير مبنية أو تحتاج اتصالاً آمناً (https).','This page is not built, or needs a secure (https) connection.');$('go').disabled=true;return}
   for(const st of[localStorage,sessionStorage]){let a;try{a=JSON.parse(st.getItem(AUTH))}catch(e){}
-    if(a&&a.kid===PAYLOAD.kid){try{return await openApp(unb64(a.k),a.role,st===localStorage)}catch(e){}}
+    if(a&&a.kid===PAYLOAD.kid){try{return await openApp(unb64(a.k),a.role,st===localStorage,'remembered')}catch(e){}}
     try{st.removeItem(AUTH)}catch(e){}}
   showLock();
 })();

@@ -88,8 +88,12 @@ def build():
         sys.exit('Refusing to build without an enabled admin password.')
     payload = seal(app, enabled)
     shell = open(path('login.html'), encoding='utf-8').read()
+    # analytics.json = {url, key}: Supabase project for the separate analytics site (public anon key; empty = off)
+    analytics = json.load(open(path('analytics.json'))) if os.path.exists(path('analytics.json')) else {}
+    analytics = analytics if analytics.get('url') and analytics.get('key') else None
     open(path('index.html'), 'w', encoding='utf-8').write(
-        shell.replace('/*PAYLOAD*/null', json.dumps(payload, separators=(',', ':'))))
+        shell.replace('/*PAYLOAD*/null', json.dumps(payload, separators=(',', ':')))
+             .replace('/*ANALYTICS*/null', json.dumps(analytics, separators=(',', ':'))))
     # service worker: versioned by the build key so every build replaces the cached app
     open(path('sw.js'), 'w').write(SW.replace('__V__', payload['kid'].replace('/', '_')))
     buf = io.BytesIO()
