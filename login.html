@@ -107,7 +107,7 @@ function track(event,role,method){if(!ANALYTICS)return;try{const ua=navigator.us
   device=/iPhone/.test(ua)?'iPhone':ipad?'iPad':/Android/.test(ua)?'Android':/Macintosh/.test(ua)?'Mac':/Windows/.test(ua)?'Windows':'Other',
   os=(device==='iPhone'||device==='iPad')&&m?'iOS '+m[1]+'.'+m[2]:/Android (\d+)/.test(ua)?'Android '+RegExp.$1:device==='Mac'?'macOS':device==='Windows'?'Windows':'',
   browser=/EdgiOS|Edg\//.test(ua)?'Edge':/CriOS|Chrome/.test(ua)?'Chrome':/FxiOS|Firefox/.test(ua)?'Firefox':/Safari/.test(ua)?'Safari':'Other';
- fetch(ANALYTICS.url+'/rest/v1/rpc/log_open',{method:'POST',keepalive:true,headers:{apikey:ANALYTICS.key,Authorization:'Bearer '+ANALYTICS.key,'Content-Type':'application/json'},
+ fetch(ANALYTICS.url+'/rest/v1/rpc/log_open',{method:'POST',keepalive:true,headers:{apikey:ANALYTICS.key,'Content-Type':'application/json'},
   body:JSON.stringify({p_event:event,p_role:role||null,p_method:method||null,p_device:device,p_os:os,p_browser:browser,
    p_standalone:navigator.standalone===true||matchMedia('(display-mode: standalone)').matches,p_lang:lang})}).catch(()=>{})}catch(e){}}
 const AUTH='beitna:auth',FID='beitna:faceid';
