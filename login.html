@@ -227,7 +227,8 @@ $('f').onsubmit=async e=>{e.preventDefault();const pw=$('pw').value,un=$('un').v
   const keep=$('rem').checked,open=k=>openApp(hit.raw,hit.role,k,'password',hit.name).catch(e=>{resetGo();$('err').textContent=L('تعذّر فتح التطبيق: ','Could not open the app: ')+e.message});
   // admins who want to stay signed in are offered Face ID instead of keeping the key on the device
   if(wantFace&&hit.role!=='admin'){$('err').classList.remove('hint');$('err').textContent=L('Face ID متاح لحساب المدير فقط.','Face ID is only available for the admin account.')}
-  if((keep||wantFace)&&hit.role==='admin'&&await canFaceID()){$('f').hidden=true;$('offer').hidden=false;
+  // sign-in goes straight into the app; the Face ID offer only appears if the person tapped 'Unlock with Face ID' to set it up
+  if(wantFace&&hit.role==='admin'&&await canFaceID()){$('f').hidden=true;$('offer').hidden=false;
     $('of-y').onclick=async()=>{try{await enableFaceID(hit.raw,hit.role,hit.name);open(false)}catch(e){open(true)}};$('of-n').onclick=()=>open(true);return}
   open(keep)};
 (async()=>{
