@@ -57,7 +57,8 @@ def seal(data, passwords):
     for p in passwords:
         salt, wiv = os.urandom(16), os.urandom(12)
         # the person's display name is sealed with the key, so names never appear in the public page
-        sealed = key + p.get('name', '').encode()
+        ident = {k: p.get(k, '') for k in ('first', 'last', 'firstAr', 'lastAr', 'partner', 'partnerAr')}
+        sealed = key + json.dumps(ident, ensure_ascii=False, separators=(',', ':')).encode()
         slots.append({'role': p['role'], 'salt': b64(salt), 'iv': b64(wiv),
                       'key': b64(AESGCM(kek(p['password'], salt, p.get('username', ''))).encrypt(wiv, sealed, None))})
     return {'v': 1, 'iter': ITER, 'kid': b64(os.urandom(9)), 'iv': b64(iv),
