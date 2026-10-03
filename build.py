@@ -77,7 +77,9 @@ def bundle():
     # Supabase project (public key) for sync, from analytics.json; empty = sync off
     cfg = json.load(open(path('analytics.json'))) if os.path.exists(path('analytics.json')) else {}
     cfg = cfg if cfg.get('url') and cfg.get('key') else None
-    html = shell.replace('{{CSS}}', css).replace('{{JS}}', js).replace('/*SB*/null', json.dumps(cfg, separators=(',', ':')))
+    # payments.json = {provider, individual, couple}: hosted checkout links from the payment provider (empty = not connected)
+    pay = json.load(open(path('payments.json'))) if os.path.exists(path('payments.json')) else {}
+    html = shell.replace('{{CSS}}', css).replace('{{JS}}', js).replace('/*SB*/null', json.dumps(cfg, separators=(',', ':'))).replace('/*PAY*/null', json.dumps(pay, separators=(',', ':')))
     open(path('app.html'), 'w', encoding='utf-8').write(html)
     return html.encode()
 

@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en" dir="ltr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Payment &amp; Refund Policy · Beitna</title>
+<meta name="description" content="Beitna subscription, payment, cancellation and refund policy.">
+<link rel="icon" href="icons/logo.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Inter:wght@400..700&display=swap">
+<style>
+/* Public billing policy: subscriptions, payment, cancellation, refunds. Testing version, 3 Oct 2026. */
+:root{--bg:oklch(95.6% .018 75);--ink:oklch(21% .02 50);--ink-2:oklch(21% .02 50/.62);--hairline:oklch(21% .02 50/.1);--card:oklch(99.2% .006 80/.8);
+  --clay:oklch(50% .125 34);--gold-ink:oklch(58% .1 75);--fill:oklch(40% .03 60/.07);
+  --sans:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Arabic","Inter","IBM Plex Sans Arabic",system-ui,sans-serif;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:oklch(17% .012 50);--ink:oklch(96% .01 80);--ink-2:oklch(96% .01 80/.62);--hairline:oklch(96% .01 80/.1);--card:oklch(24% .012 50/.85);--clay:oklch(72% .12 42);--fill:oklch(96% .01 80/.07);color-scheme:dark}}
+:root[data-theme="dark"]{--bg:oklch(17% .012 50);--ink:oklch(96% .01 80);--ink-2:oklch(96% .01 80/.62);--hairline:oklch(96% .01 80/.1);--card:oklch(24% .012 50/.85);--clay:oklch(72% .12 42);--fill:oklch(96% .01 80/.07);color-scheme:dark}
+*{box-sizing:border-box}[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased}
+:lang(ar) body,body:lang(ar){line-height:1.85}
+.top{position:sticky;top:0;z-index:5;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:calc(env(safe-area-inset-top,0px) + 12px) 16px 12px;direction:ltr;
+  background:linear-gradient(180deg,var(--bg) 55%,transparent);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+.brand{display:flex;align-items:center;gap:9px;font-weight:700;font-size:18px;color:inherit;text-decoration:none}.brand img{width:30px;height:30px;border-radius:8px}
+.seg{display:flex;gap:2px;padding:3px;border-radius:999px;background:var(--fill)}
+.seg button{border:0;background:none;font:inherit;font-size:13.5px;padding:6px 13px;border-radius:999px;color:var(--ink-2);cursor:pointer}
+.seg button.on{background:var(--card);color:var(--ink);font-weight:650;box-shadow:0 2px 8px oklch(30% .04 50/.12)}
+main{max-width:720px;margin:0 auto;padding:8px 18px 64px}
+h1{font-size:32px;line-height:1.15;letter-spacing:-.02em;margin:18px 0 6px}:lang(ar) h1{letter-spacing:0}
+.meta{color:var(--ink-2);font-size:14px}
+.note{margin:18px 0 8px;padding:14px 16px;border-radius:16px;background:var(--card);border:.5px solid var(--hairline);font-size:15px}
+.note b{color:var(--gold-ink)}
+h2{font-size:20px;margin:30px 0 8px;letter-spacing:-.01em}:lang(ar) h2{letter-spacing:0}
+ul{padding-inline-start:20px;margin:6px 0}li{margin:4px 0}
+.card{background:var(--card);border:.5px solid var(--hairline);border-radius:18px;padding:4px 16px;margin:10px 0}
+.row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:12px;padding:11px 0;border-top:.5px solid var(--hairline);font-size:15px}.row:first-child{border-top:0}
+.row b{font-weight:600}
+a{color:var(--clay)}
+footer{margin-top:40px;color:var(--ink-2);font-size:13.5px}
+@media (max-width:560px){.row{grid-template-columns:1fr;gap:2px}}
+.toc{display:flex;flex-wrap:wrap;gap:6px 14px;margin:6px 0 0;font-size:13.5px}.toc a{color:var(--ink-2);text-decoration:none;border-bottom:1px solid var(--hairline)}
+h2{scroll-margin-top:70px}
+</style></head><body>
+<header class="top"><a class="brand" href="./"><img src="icons/logo.svg" alt=""><span data-l="ar">بيتنا</span><span data-l="en">Beitna</span></a>
+ <div class="seg" role="group" aria-label="Language"><button data-set="ar">العربية</button><button data-set="en">English</button></div></header>
+
+<main>
+<nav class="toc" data-l="en"><a href="#plans">Plans</a><a href="#payment">Payment</a><a href="#renewal">Renewal</a><a href="#cancel">Cancellation</a><a href="#refund">Refunds</a></nav>
+<nav class="toc" data-l="ar" dir="rtl"><a href="#plans-ar">الخطط</a><a href="#payment-ar">الدفع</a><a href="#renewal-ar">التجديد</a><a href="#cancel-ar">الإلغاء</a><a href="#refund-ar">الاسترداد</a></nav>
+<!-- ================= English ================= -->
+<article data-l="en" lang="en" dir="ltr">
+<h1>Payment &amp; Refund Policy</h1>
+<div class="meta">Beitna (بيتنا) · Last updated 3 October 2026</div>
+<div class="note"><b>Testing version.</b> Beitna is in private testing and isn't charging anyone yet. This policy applies once paid subscriptions open, and it will be confirmed before then.</div>
+
+<h2 id="plans">1. Plans and prices</h2>
+<div class="card">
+ <div class="row"><b>Individual</b><span><b>2 JOD a month</b> for one person.</span></div>
+ <div class="row"><b>Couple</b><span><b>4 JOD a month</b> for both partners in one household. One payment covers both of you.</span></div>
+</div>
+<p>Prices are in Jordanian dinars. The price you'll pay is always shown before you confirm a payment.</p>
+
+<h2 id="payment">2. How payment works</h2>
+<ul>
+ <li>You pay by debit or credit card (Visa or Mastercard) on a <b>secure page run by a licensed payment provider</b>.</li>
+ <li><b>Beitna never sees, receives or stores your full card number or security code.</b> The payment provider handles them under the card industry's security standard (PCI DSS). We only receive the result of the payment and, to identify your card in your billing history, its last four digits.</li>
+ <li>Your bank may charge its own fees, for example for foreign-currency or online transactions. These are between you and your bank.</li>
+</ul>
+
+<h2 id="renewal">3. Monthly renewal</h2>
+<ul>
+ <li>Subscriptions are billed <b>monthly in advance</b> and <b>renew automatically</b> on the same day each month until you cancel.</li>
+ <li>If a payment fails, we'll try again over the next few days and let you know. If it still can't be collected, paid features pause until the subscription is paid. Your data is never deleted because of a failed payment.</li>
+ <li>If you switch between Individual and Couple, the new price applies from your next billing date.</li>
+ <li>If our prices change, we'll tell you at least <b>30 days</b> before the new price applies. You can cancel before then.</li>
+</ul>
+
+<h2 id="cancel">4. Cancellation</h2>
+<ul>
+ <li>You can cancel <b>at any time</b>, with no cancellation fee.</li>
+ <li>After cancelling, you keep paid features until the end of the month you've already paid for, and you won't be charged again.</li>
+ <li>Your household data stays yours after cancelling. You can still view it and download a backup.</li>
+</ul>
+
+<h2 id="refund">5. Refunds</h2>
+<div class="card">
+ <div class="row"><b>First payment, 7-day guarantee</b><span>If Beitna isn't right for you, ask within <b>7 days</b> of your first-ever payment for a <b>full refund</b>.</span></div>
+ <div class="row"><b>Charged by mistake</b><span>Duplicate charges, charges after you cancelled, or a wrong amount are refunded <b>in full</b>.</span></div>
+ <div class="row"><b>Otherwise</b><span>Monthly payments aren't refunded for the unused part of a month. You keep access until the paid month ends.</span></div>
+</div>
+<p>Refunds go back to the card you paid with. Once we approve a refund, it normally appears within <b>5 to 14 business days</b>, depending on your bank. To ask for a refund, contact the person who gave you access to Beitna during testing. A billing contact will be added here before payments open.</p>
+<p>Nothing in this policy limits your rights under Jordan's Consumer Protection Law.</p>
+
+<h2>6. Questions</h2>
+<p>For anything about payments or your subscription during testing, contact the person who gave you access to Beitna. See also our <a href="privacy.html">Privacy Policy</a>.</p>
+<footer>Beitna (بيتنا) · Testing version · <a href="./">Open Beitna</a></footer>
+</article>
+
+<!-- ================= العربية ================= -->
+<article data-l="ar" lang="ar" dir="rtl">
+<h1>سياسة الدفع والاسترداد</h1>
+<div class="meta">بيتنا (Beitna) · آخر تحديث ٣ تشرين الأول ٢٠٢٦</div>
+<div class="note"><b>نسخة تجريبية.</b> بيتنا قيد التجربة الخاصة ولا يتقاضى أي مبالغ بعد. تسري هذه السياسة عند فتح الاشتراكات المدفوعة، وستُؤكَّد قبل ذلك.</div>
+
+<h2 id="plans-ar">١. الخطط والأسعار</h2>
+<div class="card">
+ <div class="row"><b>فردي</b><span><b>٢ دينار شهرياً</b> لشخص واحد.</span></div>
+ <div class="row"><b>للزوجين</b><span><b>٤ دنانير شهرياً</b> للشريكين في بيت واحد. دفعة واحدة تغطيكما معاً.</span></div>
+</div>
+<p>الأسعار بالدينار الأردني، ويظهر المبلغ الذي ستدفعه دائماً قبل تأكيد الدفع.</p>
+
+<h2 id="payment-ar">٢. طريقة الدفع</h2>
+<ul>
+ <li>تدفع ببطاقة الخصم أو الائتمان (فيزا أو ماستركارد) عبر <b>صفحة آمنة يديرها مزوّد دفع مرخّص</b>.</li>
+ <li><b>لا يرى بيتنا رقم بطاقتك الكامل ولا رمز الأمان، ولا يتلقاهما ولا يحفظهما.</b> يتولاهما مزوّد الدفع وفق معيار أمان صناعة البطاقات (PCI DSS). نتلقى فقط نتيجة الدفع وآخر أربعة أرقام من البطاقة لتمييزها في سجل الفواتير.</li>
+ <li>قد يفرض بنكك رسوماً خاصة به، مثل رسوم المعاملات الإلكترونية أو بالعملة الأجنبية، وهي بينك وبين بنكك.</li>
+</ul>
+
+<h2 id="renewal-ar">٣. التجديد الشهري</h2>
+<ul>
+ <li>يُدفع الاشتراك <b>شهرياً مقدماً</b> و<b>يتجدد تلقائياً</b> في اليوم نفسه من كل شهر حتى تلغيه.</li>
+ <li>إذا تعذّر الدفع، نعيد المحاولة خلال الأيام التالية ونبلغك. وإن استمر التعذّر، تتوقف الميزات المدفوعة حتى يُسدَّد الاشتراك. لا تُحذف بياناتك أبداً بسبب تعذّر الدفع.</li>
+ <li>عند التبديل بين الخطة الفردية وخطة الزوجين، يسري السعر الجديد من تاريخ الفوترة التالي.</li>
+ <li>إذا تغيّرت أسعارنا، نبلغك قبل <b>٣٠ يوماً</b> على الأقل من تطبيق السعر الجديد، ويمكنك الإلغاء قبل ذلك.</li>
+</ul>
+
+<h2 id="cancel-ar">٤. الإلغاء</h2>
+<ul>
+ <li>يمكنك الإلغاء <b>في أي وقت</b> ودون رسوم إلغاء.</li>
+ <li>بعد الإلغاء تبقى الميزات المدفوعة متاحة حتى نهاية الشهر المدفوع، ولن تُحاسَب مجدداً.</li>
+ <li>تبقى بيانات بيتكما ملكاً لكما بعد الإلغاء، ويمكنكما عرضها وتنزيل نسخة احتياطية منها.</li>
+</ul>
+
+<h2 id="refund-ar">٥. الاسترداد</h2>
+<div class="card">
+ <div class="row"><b>الدفعة الأولى: ضمان ٧ أيام</b><span>إذا لم يناسبك بيتنا، اطلب خلال <b>٧ أيام</b> من أول دفعة لك <b>استرداداً كاملاً</b>.</span></div>
+ <div class="row"><b>خصم بالخطأ</b><span>الخصم المكرر، أو الخصم بعد الإلغاء، أو المبلغ الخاطئ يُسترد <b>بالكامل</b>.</span></div>
+ <div class="row"><b>غير ذلك</b><span>لا تُسترد الدفعات الشهرية عن الجزء غير المستخدم من الشهر، وتبقى الميزات متاحة حتى نهاية الشهر المدفوع.</span></div>
+</div>
+<p>يُعاد المبلغ إلى البطاقة التي دفعت بها، ويظهر عادةً خلال <b>٥ إلى ١٤ يوم عمل</b> بعد الموافقة، حسب بنكك. لطلب الاسترداد خلال فترة التجربة، تواصل مع الشخص الذي منحك الوصول إلى بيتنا. ستُضاف جهة اتصال للفواتير هنا قبل فتح الدفع.</p>
+<p>لا يحدّ أي شيء في هذه السياسة من حقوقك بموجب قانون حماية المستهلك الأردني.</p>
+
+<h2>٦. أسئلة</h2>
+<p>لأي استفسار عن الدفع أو اشتراكك خلال فترة التجربة، تواصل مع الشخص الذي منحك الوصول إلى بيتنا. راجع أيضاً <a href="privacy.html">سياسة الخصوصية</a>.</p>
+<footer>بيتنا (Beitna) · نسخة تجريبية · <a href="./">افتح بيتنا</a></footer>
+</article>
+</main>
+<script>
+(()=>{ // language: ?lang=, then the app's saved choice, then the phone's language
+ let l=new URLSearchParams(location.search).get('lang');
+ if(!l){try{l=localStorage.getItem('beitna:lang')||JSON.parse(localStorage.getItem('beitna:v1')).settings.lang}catch(e){}}
+ if(l!=='ar'&&l!=='en')l=/^ar/.test(navigator.language)?'ar':'en';
+ const set=x=>{l=x;document.documentElement.lang=x;document.documentElement.dir=x==='ar'?'rtl':'ltr';document.title=x==='ar'?'سياسة الدفع والاسترداد · بيتنا':'Payment & Refund Policy · Beitna';
+  document.querySelectorAll('[data-l]').forEach(e=>e.hidden=e.dataset.l!==x);document.querySelectorAll('[data-set]').forEach(b=>b.classList.toggle('on',b.dataset.set===x))};
+ document.querySelectorAll('[data-set]').forEach(b=>b.onclick=()=>set(b.dataset.set));set(l);
+})();
+</script>
+</body></html>
