@@ -42,12 +42,12 @@ footer{margin-top:40px;color:var(--ink-2);font-size:13.5px}
 <!-- ================= English ================= -->
 <article data-l="en" lang="en" dir="ltr">
 <h1>Privacy Policy</h1>
-<div class="meta">Beitna (بيتنا) · Last updated 2 October 2026</div>
+<div class="meta">Beitna (بيتنا) · Last updated 3 October 2026</div>
 <div class="note"><b>Testing version.</b> Beitna is in private testing and is not yet a public product. This policy describes exactly how the current test version works. It will be updated before any public release.</div>
 
 <h2>The short version</h2>
 <ul>
- <li>Your household's money data (expenses, incomes, accounts, goals, bills, settlements, receipts) <b>stays on your device</b>. It is not uploaded to us.</li>
+ <li>Your household's money data (expenses, incomes, accounts, goals, bills, settlements, receipts) <b>stays on your device</b>, unless you turn on <b>Sync</b> to share it with your partner (section 1a).</li>
  <li>To keep the test secure, we record <b>when Beitna is opened</b>, from which <b>approximate city</b> and <b>device type</b>, and <b>which screens and buttons</b> are used.</li>
  <li>We <b>never</b> record amounts, names you type, notes, or anything else you type, and we <b>don't store IP addresses</b>.</li>
  <li>We don't sell data, show ads, or track you across other apps or websites.</li>
@@ -62,6 +62,15 @@ footer{margin-top:40px;color:var(--ink-2);font-size:13.5px}
 </ul>
 <p><b>Bank statements you import</b> (Excel or CSV) are read on your device. The file is never uploaded.</p>
 <p>Because this data lives only on your device, clearing your browser's website data or deleting the Home Screen app removes it. Use <i>Download a backup</i> on the profile screen to keep a copy. In the test version, each phone keeps its own copy. Partners' phones do not sync yet.</p>
+
+<h2>1a. If you turn on Sync between phones</h2>
+<p>Sync is optional. When you sign in and create or join a household, the household data is stored in our database (Supabase) so both partners see the same information:</p>
+<ul>
+ <li>Each partner signs in with their own email and password, managed by Supabase. We never see your password.</li>
+ <li>Only the two members of a household can read its data. Accounts marked <i>hidden from partner</i>, and their transactions, are stored separately and only their owner can read them. The database enforces this.</li>
+ <li>Payment proofs (photos and PDFs) and your phone's own settings (language, numerals, which partner you are) are not synced.</li>
+ <li>You can leave the household at any time from the Sync screen. Your partner keeps the shared data.</li>
+</ul>
 
 <h2>2. Usage and security records</h2>
 <p>To protect the test version and see how it is used, Beitna sends a small record to our database (Supabase) when:</p>
@@ -111,12 +120,12 @@ footer{margin-top:40px;color:var(--ink-2);font-size:13.5px}
 <!-- ================= العربية ================= -->
 <article data-l="ar" lang="ar" dir="rtl">
 <h1>سياسة الخصوصية</h1>
-<div class="meta">بيتنا (Beitna) · آخر تحديث ٢ تشرين الأول ٢٠٢٦</div>
+<div class="meta">بيتنا (Beitna) · آخر تحديث ٣ تشرين الأول ٢٠٢٦</div>
 <div class="note"><b>نسخة تجريبية.</b> بيتنا قيد التجربة الخاصة وليس منتجاً عاماً بعد. تصف هذه السياسة بدقة كيف تعمل النسخة التجريبية الحالية، وستُحدَّث قبل أي إطلاق عام.</div>
 
 <h2>باختصار</h2>
 <ul>
- <li>بيانات بيتكما المالية (المصاريف، الدخل، الحسابات، الأهداف، الفواتير، التسويات، الإيصالات) <b>تبقى على جهازك</b> ولا تُرفع إلينا.</li>
+ <li>بيانات بيتكما المالية (المصاريف، الدخل، الحسابات، الأهداف، الفواتير، التسويات، الإيصالات) <b>تبقى على جهازك</b>، إلا إذا فعّلت <b>المزامنة</b> لمشاركتها مع شريكك (القسم ١أ).</li>
  <li>لحماية النسخة التجريبية، نسجّل <b>متى يُفتح بيتنا</b>، ومن أي <b>مدينة تقريبية</b>، و<b>نوع الجهاز</b>، و<b>الشاشات والأزرار</b> المستخدمة.</li>
  <li><b>لا</b> نسجّل المبالغ ولا الأسماء ولا الملاحظات ولا أي شيء تكتبه، و<b>لا نحفظ عنوان IP</b>.</li>
  <li>لا نبيع البيانات، ولا نعرض إعلانات، ولا نتتبّعك في تطبيقات أو مواقع أخرى.</li>
@@ -131,6 +140,15 @@ footer{margin-top:40px;color:var(--ink-2);font-size:13.5px}
 </ul>
 <p><b>كشوف الحساب التي تستوردها</b> (Excel أو CSV) تُقرأ على جهازك، ولا يُرفع الملف إلى أي مكان.</p>
 <p>لأن هذه البيانات موجودة على جهازك فقط، فإن مسح بيانات المواقع في المتصفح أو حذف التطبيق من الشاشة الرئيسية يحذفها. استخدم «نزّل نسخة احتياطية» في شاشة الملف الشخصي للاحتفاظ بنسخة. في النسخة التجريبية، لكل هاتف نسخته الخاصة، ولا تتم المزامنة بين هاتفي الشريكين بعد.</p>
+
+<h2>١أ. إذا فعّلت المزامنة بين الهاتفين</h2>
+<p>المزامنة اختيارية. عند تسجيل الدخول وإنشاء بيت أو الانضمام إليه، تُخزَّن بيانات البيت في قاعدة بياناتنا (Supabase) ليرى الشريكان المعلومات نفسها:</p>
+<ul>
+ <li>يسجّل كل شريك الدخول ببريده وكلمة مروره عبر Supabase. لا نرى كلمة مرورك أبداً.</li>
+ <li>لا يستطيع قراءة بيانات البيت إلا عضواه. الحسابات «المخفية عن الشريك» وحركاتها تُخزَّن منفصلة ولا يقرؤها إلا صاحبها، وتفرض قاعدة البيانات ذلك.</li>
+ <li>إثباتات الدفع (الصور وملفات PDF) وإعدادات هاتفك (اللغة، الأرقام، أي شريك أنت) لا تُزامَن.</li>
+ <li>يمكنك مغادرة البيت في أي وقت من شاشة المزامنة، ويحتفظ شريكك بالبيانات المشتركة.</li>
+</ul>
 
 <h2>٢. سجلات الاستخدام والأمان</h2>
 <p>لحماية النسخة التجريبية ومعرفة كيف تُستخدم، يرسل بيتنا سجلاً صغيراً إلى قاعدة بياناتنا (Supabase) عندما:</p>

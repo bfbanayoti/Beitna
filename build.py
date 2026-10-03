@@ -74,7 +74,10 @@ def bundle():
     shell = open(path('src', 'shell.html'), encoding='utf-8').read()
     css = open(path('src', 'styles.css'), encoding='utf-8').read()
     js = ''.join(open(f, encoding='utf-8').read() for f in sorted(glob.glob(path('src', 'js', '*.js'))))
-    html = shell.replace('{{CSS}}', css).replace('{{JS}}', js)
+    # Supabase project (public key) for sync, from analytics.json; empty = sync off
+    cfg = json.load(open(path('analytics.json'))) if os.path.exists(path('analytics.json')) else {}
+    cfg = cfg if cfg.get('url') and cfg.get('key') else None
+    html = shell.replace('{{CSS}}', css).replace('{{JS}}', js).replace('/*SB*/null', json.dumps(cfg, separators=(',', ':')))
     open(path('app.html'), 'w', encoding='utf-8').write(html)
     return html.encode()
 
