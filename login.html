@@ -56,6 +56,7 @@ form{width:100%;display:flex;flex-direction:column;gap:12px;padding:16px;border-
   -webkit-backdrop-filter:blur(30px) saturate(190%);backdrop-filter:blur(30px) saturate(190%);border:.5px solid var(--rim-low);
   box-shadow:inset 0 1px 0 var(--rim),0 2px 6px oklch(30% .04 50/.06),0 24px 60px oklch(30% .04 50/.14)}
 .field{position:relative}
+#un{padding:0 16px!important;margin-bottom:0}
 input[type=password],input[type=text]{width:100%;height:54px;border-radius:16px;border:.5px solid var(--hairline);background:var(--fill);color:var(--ink);
   font:inherit;font-size:17px;padding:0 52px 0 16px;outline:none;transition:box-shadow .2s,background .2s;direction:ltr;text-align:start}
 input:focus{background:rgb(255 255 255/.5);box-shadow:0 0 0 3px oklch(60% .145 40/.25)}
@@ -85,7 +86,7 @@ button.go[disabled]{opacity:.7}
   <div class="mark" aria-hidden="true"><svg viewBox="0 0 64 64"><defs><linearGradient id="lb" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#c8664a"/><stop offset="1" stop-color="#7e2f22"/></linearGradient><linearGradient id="ld" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f3d9a4"/><stop offset="1" stop-color="#c99a52"/></linearGradient></defs><rect width="64" height="64" rx="15" fill="url(#lb)"/><path d="M21 49V31a11 11 0 0 1 22 0v18" fill="none" stroke="#fbf3ea" stroke-width="4.6" stroke-linecap="round"/><circle cx="32" cy="41" r="3.4" fill="url(#ld)"/></svg></div>
   <div><h1 id="t">بيتنا</h1><p class="sub" id="s"></p></div>
   <form id="f" autocomplete="on">
-    <input type="text" name="username" value="beitna" autocomplete="username" hidden>
+    <input id="un" type="text" name="username" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false" inputmode="email" required aria-label="Username">
     <div class="field"><input id="pw" type="password" autocomplete="current-password" required aria-label="Password">
       <button type="button" class="eye" id="eye" aria-label="Show password"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
     <button class="go" id="go" type="submit"></button>
@@ -140,28 +141,29 @@ const FACE='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-wi
 function texts(){document.documentElement.lang=lang;document.documentElement.dir=lang==='ar'?'rtl':'ltr';
   document.querySelectorAll('.langsw button').forEach(b=>b.classList.toggle('on',b.dataset.l===lang));
   $('t').textContent=L('بيتنا','Beitna');document.title=L('بيتنا','Beitna');
-  $('s').textContent=L('أدخل كلمة المرور للمتابعة','Enter the password to continue');
-  if(!$('go').disabled)$('go').textContent=L('افتح','Unlock');$('r').textContent=L('تذكّر هذا الجهاز','Remember this device');
+  $('s').textContent=L('سجّل الدخول للمتابعة','Sign in to continue');
+  if(!$('go').disabled)$('go').textContent=L('تسجيل الدخول','Sign in');$('r').textContent=L('تذكّر هذا الجهاز','Remember this device');
   $('fid').innerHTML=FACE+L('افتح بـ Face ID','Unlock with Face ID');
   $('ft').textContent=L('مشفّر بالكامل على جهازك','End-to-end encrypted on your device');
   $('pl').textContent=L('سياسة الخصوصية','Privacy policy');$('pl').href='privacy.html?lang='+lang;
-  if(ANALYTICS)$('pn').textContent=L('للأمان، نسجّل مرات الفتح والمدينة التقريبية ونوع الجهاز والشاشات والأزرار المستخدمة. لا نسجّل المبالغ ولا ما تكتبه، ولا نحفظ عنوان IP.','For security, opens, approximate city, device type and the screens and buttons used are recorded. Amounts and anything you type are not, and IP addresses are not stored.');$('pw').placeholder=L('كلمة المرور','Password');
+  if(ANALYTICS)$('pn').textContent=L('للأمان، نسجّل مرات الفتح والمدينة التقريبية ونوع الجهاز والشاشات والأزرار المستخدمة. لا نسجّل المبالغ ولا ما تكتبه، ولا نحفظ عنوان IP.','For security, opens, approximate city, device type and the screens and buttons used are recorded. Amounts and anything you type are not, and IP addresses are not stored.');$('pw').placeholder=L('كلمة المرور','Password');$('un').placeholder=L('اسم المستخدم أو البريد','Username or email');
   $('of-t').textContent=L('استخدم Face ID في المرة القادمة؟','Use Face ID next time?');$('of-d').textContent=L('افتح بيتنا بنظرة، دون كتابة كلمة المرور.','Open Beitna with a glance instead of typing the password.');
   $('of-y').textContent=L('فعّل Face ID','Turn on Face ID');$('of-n').textContent=L('ليس الآن','Not now')}
 
-async function openApp(raw,role,keep,method){
+async function openApp(raw,role,keep,method,name){
   const key=await crypto.subtle.importKey('raw',raw,'AES-GCM',false,['decrypt']);
   const html=dec.decode(await crypto.subtle.decrypt({name:'AES-GCM',iv:unb64(PAYLOAD.iv)},key,unb64(PAYLOAD.ct)));
-  const rec=JSON.stringify({kid:PAYLOAD.kid,k:b64(raw),role});
+  const rec=JSON.stringify({kid:PAYLOAD.kid,k:b64(raw),role,name:name||''});
   try{(keep&&role==='admin'?localStorage:sessionStorage).setItem(AUTH,rec)}catch(e){}  // guests: this session only
   track('unlock',role,method);
   document.open();document.write(html);document.close();
 }
-async function unwrap(pw){
-  const base=await crypto.subtle.importKey('raw',enc.encode(pw),'PBKDF2',false,['deriveKey']);
+async function unwrap(pw,user){
+  const base=await crypto.subtle.importKey('raw',enc.encode(user.trim().toLowerCase()+'\n'+pw),'PBKDF2',false,['deriveKey']);
   return Promise.any(PAYLOAD.slots.map(async s=>{
     const kek=await crypto.subtle.deriveKey({name:'PBKDF2',salt:unb64(s.salt),iterations:PAYLOAD.iter,hash:'SHA-256'},base,{name:'AES-GCM',length:256},false,['decrypt']);
-    return {raw:await crypto.subtle.decrypt({name:'AES-GCM',iv:unb64(s.iv)},kek,unb64(s.key)),role:s.role}}));
+    const b=new Uint8Array(await crypto.subtle.decrypt({name:'AES-GCM',iv:unb64(s.iv)},kek,unb64(s.key)));
+    return {raw:b.slice(0,32).buffer,role:s.role,name:dec.decode(b.slice(32))}}));
 }
 
 // ---- Face ID (WebAuthn passkey + PRF): the passkey's PRF secret encrypts the app key, so nothing usable is stored in plain form ----
@@ -169,7 +171,7 @@ const PRF_SALT=enc.encode('beitna-faceid-prf-v1'.padEnd(32,'.'));
 async function canFaceID(){try{if(!window.PublicKeyCredential||!await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable())return false;
   if(PublicKeyCredential.getClientCapabilities){const c=await PublicKeyCredential.getClientCapabilities();if(c&&('extension:prf' in c))return !!c['extension:prf']}return true}catch(e){return false}}
 async function prfKey(out){return crypto.subtle.importKey('raw',out,'AES-GCM',false,['encrypt','decrypt'])}
-async function enableFaceID(raw,role){
+async function enableFaceID(raw,role,name){
   const cred=await navigator.credentials.create({publicKey:{rp:{name:'Beitna'},user:{id:crypto.getRandomValues(new Uint8Array(16)),name:'beitna-'+role,displayName:'Beitna'},
     challenge:crypto.getRandomValues(new Uint8Array(32)),pubKeyCredParams:[{type:'public-key',alg:-7},{type:'public-key',alg:-257}],
     authenticatorSelection:{authenticatorAttachment:'platform',residentKey:'preferred',userVerification:'required'},timeout:60000,extensions:{prf:{eval:{first:PRF_SALT}}}}});
@@ -178,12 +180,12 @@ async function enableFaceID(raw,role){
   if(!out){const a=await navigator.credentials.get({publicKey:{challenge:crypto.getRandomValues(new Uint8Array(32)),allowCredentials:[{type:'public-key',id:cred.rawId}],userVerification:'required',extensions:{prf:{eval:{first:PRF_SALT}}}}});
     out=(a.getClientExtensionResults().prf||{}).results?.first;if(!out)throw new Error('prf')}
   const iv=crypto.getRandomValues(new Uint8Array(12)),ct=await crypto.subtle.encrypt({name:'AES-GCM',iv},await prfKey(out),raw);
-  localStorage.setItem(FID,JSON.stringify({id:b64(cred.rawId),kid:PAYLOAD.kid,iv:b64(iv),ct:b64(ct),role}));
+  localStorage.setItem(FID,JSON.stringify({id:b64(cred.rawId),kid:PAYLOAD.kid,iv:b64(iv),ct:b64(ct),role,name:name||''}));
 }
 async function faceUnlock(){const f=JSON.parse(localStorage.getItem(FID));
   const a=await navigator.credentials.get({publicKey:{challenge:crypto.getRandomValues(new Uint8Array(32)),allowCredentials:[{type:'public-key',id:unb64(f.id)}],userVerification:'required',extensions:{prf:{eval:{first:PRF_SALT}}}}});
   const out=(a.getClientExtensionResults().prf||{}).results?.first;if(!out)throw new Error('prf');
-  const raw=await crypto.subtle.decrypt({name:'AES-GCM',iv:unb64(f.iv)},await prfKey(out),unb64(f.ct));return openApp(raw,f.role,false,'faceid')}
+  const raw=await crypto.subtle.decrypt({name:'AES-GCM',iv:unb64(f.iv)},await prfKey(out),unb64(f.ct));return openApp(raw,f.role,false,'faceid',f.name)}
 
 function showLock(){texts();$('lock').hidden=false;track('view');
   let f=null;try{f=JSON.parse(localStorage.getItem(FID))}catch(e){}
@@ -191,25 +193,25 @@ function showLock(){texts();$('lock').hidden=false;track('view');
   else{try{localStorage.removeItem(FID)}catch(e){}
     // not set up yet: still show the button; tapping it explains the one-time step
     canFaceID().then(ok=>{if(!ok)return;$('fid').hidden=false;$('fid').onclick=()=>{wantFace=true;$('rem').checked=true;$('err').classList.add('hint');
-      $('err').textContent=L('أدخل كلمة مرور المدير مرة واحدة لتفعيل Face ID.','Enter the admin password once to turn on Face ID.');$('pw').focus()}});
+      $('err').textContent=L('سجّل الدخول بحساب المدير مرة واحدة لتفعيل Face ID.','Sign in with the admin account once to turn on Face ID.');$('pw').focus()}});
     setTimeout(()=>$('pw').focus(),350)}}
 let wantFace=false;
 $('eye').onclick=()=>{const p=$('pw');p.type=p.type==='password'?'text':'password'};
-const resetGo=()=>{$('go').disabled=false;$('go').textContent=L('افتح','Unlock')};
-$('f').onsubmit=async e=>{e.preventDefault();const pw=$('pw').value;if(!pw)return;
+const resetGo=()=>{$('go').disabled=false;$('go').textContent=L('تسجيل الدخول','Sign in')};
+$('f').onsubmit=async e=>{e.preventDefault();const pw=$('pw').value,un=$('un').value;if(!pw||!un.trim())return;
   $('go').disabled=true;$('go').innerHTML='<span class="spin"></span>';$('err').textContent='';$('err').classList.remove('hint');
-  let hit;try{hit=await unwrap(pw)}catch(_){try{if(pw.trim()!==pw)hit=await unwrap(pw.trim())}catch(_){}}
-  if(!hit){track('fail');resetGo();$('err').textContent=L('كلمة المرور غير صحيحة','Incorrect password');const f=$('f');f.classList.remove('shake');void f.offsetWidth;f.classList.add('shake');$('pw').select();return}
-  const keep=$('rem').checked,open=k=>openApp(hit.raw,hit.role,k,'password').catch(e=>{resetGo();$('err').textContent=L('تعذّر فتح التطبيق: ','Could not open the app: ')+e.message});
+  let hit;try{hit=await unwrap(pw,un)}catch(_){try{if(pw.trim()!==pw)hit=await unwrap(pw.trim(),un)}catch(_){}}
+  if(!hit){track('fail');resetGo();$('err').textContent=L('اسم المستخدم أو كلمة المرور غير صحيحة','Incorrect username or password');const f=$('f');f.classList.remove('shake');void f.offsetWidth;f.classList.add('shake');$('pw').select();return}
+  const keep=$('rem').checked,open=k=>openApp(hit.raw,hit.role,k,'password',hit.name).catch(e=>{resetGo();$('err').textContent=L('تعذّر فتح التطبيق: ','Could not open the app: ')+e.message});
   // admins who want to stay signed in are offered Face ID instead of keeping the key on the device
-  if(wantFace&&hit.role!=='admin'){$('err').classList.remove('hint');$('err').textContent=L('Face ID متاح لكلمة مرور المدير فقط.','Face ID is only available with the admin password.')}
+  if(wantFace&&hit.role!=='admin'){$('err').classList.remove('hint');$('err').textContent=L('Face ID متاح لحساب المدير فقط.','Face ID is only available for the admin account.')}
   if((keep||wantFace)&&hit.role==='admin'&&await canFaceID()){$('f').hidden=true;$('offer').hidden=false;
-    $('of-y').onclick=async()=>{try{await enableFaceID(hit.raw,hit.role);open(false)}catch(e){open(true)}};$('of-n').onclick=()=>open(true);return}
+    $('of-y').onclick=async()=>{try{await enableFaceID(hit.raw,hit.role,hit.name);open(false)}catch(e){open(true)}};$('of-n').onclick=()=>open(true);return}
   open(keep)};
 (async()=>{
   if(!PAYLOAD||!crypto.subtle){showLock();$('err').textContent=L('هذه الصفحة غير مبنية أو تحتاج اتصالاً آمناً (https).','This page is not built, or needs a secure (https) connection.');$('go').disabled=true;return}
   for(const st of[localStorage,sessionStorage]){let a;try{a=JSON.parse(st.getItem(AUTH))}catch(e){}
-    if(a&&a.kid===PAYLOAD.kid){try{return await openApp(unb64(a.k),a.role,st===localStorage,'remembered')}catch(e){}}
+    if(a&&a.kid===PAYLOAD.kid){try{return await openApp(unb64(a.k),a.role,st===localStorage,'remembered',a.name)}catch(e){}}
     try{st.removeItem(AUTH)}catch(e){}}
   showLock();
 })();

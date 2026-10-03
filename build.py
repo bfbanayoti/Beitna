@@ -44,8 +44,10 @@ self.addEventListener('fetch',e=>{const r=e.request;if(r.method!=='GET')return;c
 """
 
 
-def kek(password, salt):
-    return PBKDF2HMAC(hashes.SHA256(), 32, salt, ITER).derive(password.encode())
+def kek(password, salt, username=''):
+    # a login is the username and password together (username lower-cased); old password-only slots have no username
+    secret = (username.strip().lower() + '\n' + password) if username else password
+    return PBKDF2HMAC(hashes.SHA256(), 32, salt, ITER).derive(secret.encode())
 
 
 def seal(data, passwords):
@@ -54,16 +56,18 @@ def seal(data, passwords):
     slots = []
     for p in passwords:
         salt, wiv = os.urandom(16), os.urandom(12)
+        # the person's display name is sealed with the key, so names never appear in the public page
+        sealed = key + p.get('name', '').encode()
         slots.append({'role': p['role'], 'salt': b64(salt), 'iv': b64(wiv),
-                      'key': b64(AESGCM(kek(p['password'], salt)).encrypt(wiv, key, None))})
+                      'key': b64(AESGCM(kek(p['password'], salt, p.get('username', ''))).encrypt(wiv, sealed, None))})
     return {'v': 1, 'iter': ITER, 'kid': b64(os.urandom(9)), 'iv': b64(iv),
             'ct': b64(AESGCM(key).encrypt(iv, data, None)), 'slots': slots}
 
 
-def unseal(payload, pw):
+def unseal(payload, pw, username=''):
     for s in payload['slots']:
         try:
-            key = AESGCM(kek(pw, unb64(s['salt']))).decrypt(unb64(s['iv']), unb64(s['key']), None)
+            key = AESGCM(kek(pw, unb64(s['salt']), username)).decrypt(unb64(s['iv']), unb64(s['key']), None)[:32]
         except Exception:
             continue
         return AESGCM(key).decrypt(unb64(payload['iv']), unb64(payload['ct']), None), s['role']
@@ -109,8 +113,9 @@ def build():
 
 
 def unpack():
+    user = input('Admin username: ')
     pw = getpass.getpass('Admin password: ')
-    data, role = unseal(json.load(open(path('source.enc'))), pw)
+    data, role = unseal(json.load(open(path('source.enc'))), pw, user)
     if not data:
         sys.exit('Wrong password (source.enc needs the admin password).')
     with tarfile.open(fileobj=io.BytesIO(data), mode='r:gz') as tar:
