@@ -6,6 +6,7 @@ The live app always runs the latest version. Dates are when the version was publ
 
 | Version | Date | Highlights |
 |---|---|---|
+| [v0.1.10](#v0110--5-october-2026) | 5 Oct 2026 | Monthly budgets; edit & delete bills, accounts, cards, investments, jam'iyas and goals |
 | [v0.1.9](#v019--3-october-2026) | 3 Oct 2026 | In-app What's New (App Store–style version history) |
 | [v0.1.8](#v018--3-october-2026) | 3 Oct 2026 | Username + password logins, Sign in / Sign up, Jordanian names, "Beit …" home name |
 | [v0.1.7](#v017--3-october-2026) | 3 Oct 2026 | Subscription-only access, payment screen with Apple Pay / Google Pay, owner walkthrough |
@@ -16,6 +17,17 @@ The live app always runs the latest version. Dates are when the version was publ
 | [v0.1.2](#v012--2-october-2026) | 2 Oct 2026 | Luxury Home, Excel/statement import, settlements, Face ID, home-screen app |
 | [v0.1.1](#v011--2-october-2026) | 2 Oct 2026 | Liquid glass iPhone redesign, encrypted password lock, guest restrictions |
 | [v0.1.0](#v010--2-october-2026) | 2 Oct 2026 | First version of the app |
+
+## v0.1.10 — 5 October 2026
+[Compare with v0.1.9](https://github.com/bfbanayoti/Beitna/compare/v0.1.9...v0.1.10) · [Download v0.1.10](https://github.com/bfbanayoti/Beitna/releases/tag/v0.1.10)
+
+**What's New (as in the App Store):** Monthly budgets per category with a heads-up at 80% and 100%. Edit or delete bills, accounts, cards and goals. Add and update investments. Create your own jam'iya and track each round.
+- **Budgets:** new card on Home (after "Where it went") with a progress bar per category, amount left and days to go; amber at 80%, red when over. Set them in one sheet that shows last month's spending as a guide. A toast warns when an expense or bill payment crosses 80% or 100%.
+- **Bills:** tap a bill in Accounts to change its name, amount, due day, category or account, or delete it.
+- **Accounts & cards:** tap an account (or **Edit** on a card) to rename it, correct the balance, change what your partner sees, or update the card limit, due day and last 4 digits. Deleting is blocked while transactions or bills still use the account.
+- **Investments:** the section is always shown, with **Add an investment**; tap one to update today's value (the net-worth chart follows) or delete it.
+- **Jam'iyas:** new section in Accounts. Create one with members in turn order; record each partner's payment (adds a Jam'iya expense) and move to the next round (when it's your turn, the pot is added as income). The Home card opens it.
+- **Goals:** delete a goal from its screen; past transfers stay in your activity.
 
 ## v0.1.9 — 3 October 2026
 [Compare with v0.1.8](https://github.com/bfbanayoti/Beitna/compare/v0.1.8...v0.1.9) · [Download v0.1.9](https://github.com/bfbanayoti/Beitna/releases/tag/v0.1.9)
