@@ -6,6 +6,7 @@ The live app always runs the latest version. Dates are when the version was publ
 
 | Version | Date | Highlights |
 |---|---|---|
+| [v0.1.11](#v0111--20-october-2026) | 20 Oct 2026 | 14-day free trial & yearly plans, first-run import summary, WhatsApp partner invite, reminders, Friday money date, monthly recap |
 | [v0.1.10](#v0110--5-october-2026) | 5 Oct 2026 | Monthly budgets; edit & delete bills, accounts, cards, investments, jam'iyas and goals |
 | [v0.1.9](#v019--3-october-2026) | 3 Oct 2026 | In-app What's New (App Store–style version history) |
 | [v0.1.8](#v018--3-october-2026) | 3 Oct 2026 | Username + password logins, Sign in / Sign up, Jordanian names, "Beit …" home name |
@@ -17,6 +18,30 @@ The live app always runs the latest version. Dates are when the version was publ
 | [v0.1.2](#v012--2-october-2026) | 2 Oct 2026 | Luxury Home, Excel/statement import, settlements, Face ID, home-screen app |
 | [v0.1.1](#v011--2-october-2026) | 2 Oct 2026 | Liquid glass iPhone redesign, encrypted password lock, guest restrictions |
 | [v0.1.0](#v010--2-october-2026) | 2 Oct 2026 | First version of the app |
+
+## v0.1.11 — 20 October 2026
+[Compare with v0.1.10](https://github.com/bfbanayoti/Beitna/compare/v0.1.10...v0.1.11) · [Download v0.1.11](https://github.com/bfbanayoti/Beitna/releases/tag/v0.1.11)
+
+**What's New (as in the App Store):** Try Beitna free for 14 days, no card needed, with new yearly plans (two months free). Import a statement and see straight away where your money went. Invite your partner on WhatsApp. Reminders, a Friday money date and a shareable monthly recap.
+
+**1. Value before the paywall**
+- New homes start a **14-day free trial** (no card). The sign-up button is now *Start your free trial*; a chip under the greeting shows the days left.
+- **Yearly plans:** Individual 20 JOD / year, Couple 40 JOD / year (two months free), with a Monthly / Yearly switch on every plan screen.
+- **First run:** right after creating the home, a *Let's see where your money went* screen leads to the statement import.
+- **Import summary:** after an import, a sheet shows spent / came in, top 5 categories with bars and one insight (the most repeated merchant and its yearly cost, or the biggest category annualised).
+- **Trial ending:** two days before the end, a sheet shows what the couple built (amount tracked, budgets kept, money moved to goals, partner joined) and the plans. After the trial, the paywall leads with the same summary; the data stays on the phone.
+- Owner preview in Me → *Preview the trial ending* (Day 12 / Ended), and the sign-up walkthrough now continues into the trial.
+
+**2. A two-person app**
+- **Get started** checklist on Home: import a statement → invite your partner → set budgets → turn on reminders.
+- **Invite your partner:** a dedicated sheet; after the sync account and household are created the invite code is made automatically, with a green **Send on WhatsApp** button (message in Arabic or English with the code and link).
+- **Live partner activity:** when the partner's changes sync in, a toast says e.g. "Rana added Carrefour · 32 JOD".
+- Sync is now available on tester (guest) logins too. Needs `supabase/sync.sql` run and sign-ups turned on in Supabase.
+
+**3. A reason to come back every week**
+- **Reminders** (Me → Reminders; Web Push, iPhone Home Screen app on iOS 16.4+): bills the day before at 9 am, budgets at 80% / 100%, payday plan on your salary day, Friday money date at 6 pm, and two days before the trial ends. Each type can be switched off; *Send a test* shows one immediately. Only bill names and dates go to the server, never amounts. Server: `supabase/push.sql` + Edge Function `supabase/functions/beitna-push`.
+- **Weekly money date** (opens on Friday/Saturday, or from Home → Money date / Me): spending this week vs the same days last week, top categories, budgets over 80%, nearest goal, bills due this week and one idea; both partners tap *Done*.
+- **Monthly recap:** a 9:16 story card (percentages only, no amounts): savings rate, budgets kept, top category, goal progress. Share to a story or WhatsApp (sharing is off for test logins).
 
 ## v0.1.10 — 5 October 2026
 [Compare with v0.1.9](https://github.com/bfbanayoti/Beitna/compare/v0.1.9...v0.1.10) · [Download v0.1.10](https://github.com/bfbanayoti/Beitna/releases/tag/v0.1.10)

@@ -2,3 +2,4 @@ app.html
 src/
 .passwords.json
 .venv/
+.vapid.json
